@@ -1,0 +1,46 @@
+name: 部署开心聚家族星系
+on:
+  # 推送main分支自动部署
+  push:
+    branches: [ main ]
+  # 支持手动触发部署
+  workflow_dispatch:
+
+# GitHub Pages必需的权限，不要修改
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # 1. 拉取仓库代码
+      - name: 检出仓库代码
+        uses: actions/checkout@v4
+
+      # 2. 【核心修复】指定Node.js 24，彻底消除警告
+      - name: 设置 Node.js 24 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          check-latest: true
+
+      # 3. 配置GitHub Pages
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      # 4. 上传你的页面文件
+      - name: 上传站点资源
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./
+
+      # 5. 执行部署
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
