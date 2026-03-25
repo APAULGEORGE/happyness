@@ -9,21 +9,22 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            touch-action: none; /* 禁用浏览器默认触摸行为，避免卡顿 */
+            touch-action: none;
         }
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
             background: #000;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
-            -webkit-overflow-scrolling: touch;
         }
         #canvas-container {
+            width: 100%;
+            height: 100%;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
         }
         /* UI 样式 */
         #header {
@@ -43,6 +44,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin: 0;
         }
         #hover-label {
             position: fixed;
@@ -57,36 +59,18 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(212, 175, 55, 0.3);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
-        #scroll-hint {
+        #mobile-hint {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
-            font-size: 14px;
+            font-size: 13px;
             color: rgba(255,255,255,0.6);
-            letter-spacing: 2px;
-            animation: bounce 2s infinite;
-        }
-        #mobile-hint {
-            position: fixed;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            font-size: 12px;
-            color: rgba(255,255,255,0.4);
-            display: none;
-        }
-        @media (hover: none) {
-            #mobile-hint { display: block; }
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
+            text-align: center;
+            width: 90%;
         }
         /* 管理面板样式 */
         #admin-btn {
@@ -94,49 +78,47 @@
             top: 20px;
             right: 20px;
             z-index: 102;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 10px 18px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            min-width: 60px;
-            min-height: 36px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            min-height: 44px;
         }
-        #admin-btn:hover { background: rgba(255,255,255,0.2); }
+        #admin-btn:active { transform: scale(0.96); }
         #admin-panel {
             position: fixed;
             top: 0;
-            right: -320px;
-            width: 320px;
-            max-width: 100vw;
+            right: -100%;
+            width: 100%;
+            max-width: 350px;
             height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.96);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             z-index: 103;
-            padding: 20px;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 1px solid rgba(255,255,255,0.1);
+            padding: 25px 20px;
+            transition: right 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
         #admin-panel.open { right: 0; }
         #admin-panel h2 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 400;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .upload-section { margin-bottom: 20px; }
+        .upload-section { margin-bottom: 25px; }
         .upload-section label {
             display: block;
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 8px;
+            font-size: 15px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
         }
         .upload-section select,
         .upload-section input[type="file"] {
@@ -144,60 +126,58 @@
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 10px;
-            min-height: 40px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 12px;
+            min-height: 48px;
         }
         .upload-btn {
             width: 100%;
             background: linear-gradient(90deg, #d4af37, #b8941f);
             border: none;
             color: #000;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 44px;
+            transition: all 0.2s ease;
+            min-height: 48px;
         }
-        .upload-btn:hover { transform: scale(1.02); }
+        .upload-btn:active { transform: scale(0.98); }
         .close-panel {
             position: absolute;
-            top: 20px;
+            top: 25px;
             right: 20px;
             background: none;
             border: none;
             color: #fff;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
+            opacity: 0.7;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
         }
-        .close-panel:hover { opacity: 1; }
         /* 音乐控制 */
         #music-btn {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 102;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
             color: #fff;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s ease;
+            font-size: 20px;
+            transition: all 0.2s ease;
         }
-        #music-btn:hover { background: rgba(255,255,255,0.2); }
+        #music-btn:active { transform: scale(0.96); }
         #music-btn.playing { background: rgba(212, 175, 55, 0.3); border-color: #d4af37; }
         /* 加载动画 */
         #loading {
@@ -212,12 +192,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
         #loading.hidden { opacity: 0; pointer-events: none; }
         .loader {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border: 2px solid rgba(212, 175, 55, 0.3);
             border-top-color: #d4af37;
             border-radius: 50%;
@@ -226,33 +206,9 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         #loading-text {
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 15px;
             color: rgba(255,255,255,0.6);
             letter-spacing: 2px;
-        }
-        /* 进度指示器 */
-        #progress-indicator {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .progress-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-        .progress-dot.active {
-            background: #d4af37;
-            transform: scale(1.5);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
         /* 照片预览弹窗 */
         #photo-modal {
@@ -261,9 +217,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 300;
             display: none;
             justify-content: center;
@@ -279,22 +235,24 @@
         #photo-modal .close-modal {
             position: absolute;
             top: 30px;
-            right: 30px;
+            right: 20px;
             background: none;
             border: none;
             color: #fff;
-            font-size: 36px;
+            font-size: 40px;
             cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+            opacity: 0.8;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
         }
-        #photo-modal .close-modal:hover { opacity: 1; }
         #photo-modal .modal-name {
             position: absolute;
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 24px;
+            font-size: 26px;
             color: #d4af37;
             font-weight: 300;
             letter-spacing: 2px;
@@ -310,7 +268,7 @@
             z-index: 300;
             text-align: center;
             display: none;
-            max-width: 80%;
+            max-width: 85%;
         }
     </style>
 </head>
@@ -319,8 +277,7 @@
     
     <div id="header"><h1>开心聚</h1></div>
     <div id="hover-label"></div>
-    <div id="scroll-hint">滑动探索</div>
-    <div id="mobile-hint">单指滑动旋转 · 双指缩放 · 点击查看</div>
+    <div id="mobile-hint">单指滑动旋转 · 双指捏合缩放 · 点击星球查看照片</div>
     
     <button id="music-btn">♪</button>
     <button id="admin-btn">管理</button>
@@ -343,9 +300,6 @@
         </div>
     </div>
     
-    <!-- 进度指示器 -->
-    <div id="progress-indicator"></div>
-    
     <!-- 加载页 -->
     <div id="loading">
         <div class="loader"></div>
@@ -355,7 +309,7 @@
     <!-- 错误提示 -->
     <div id="error-tip">
         <h2>加载失败</h2>
-        <p id="error-text">请更换Chrome/Edge/微信内置浏览器重试</p>
+        <p id="error-text">请更换微信/Chrome/Safari浏览器重试</p>
     </div>
 
     <!-- 照片预览弹窗 -->
@@ -370,16 +324,7 @@
 
     <!-- 稳定CDN资源 -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-    <script>
-        // 桌面端才加载后处理依赖，移动端跳过，减少加载时间
-        if(!('ontouchstart' in window)) {
-            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"><\/script>');
-            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"><\/script>');
-            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"><\/script>');
-            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"><\/script>');
-            document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"><\/script>');
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script>
         // 全局错误捕获
@@ -395,11 +340,11 @@
 
         // 环境检测
         const isMobile = 'ontouchstart' in window || navigator.userAgent.includes('Mobile');
-        const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2); // 移动端限制像素比
-        const segmentCount = isMobile ? 32 : 128; // 几何体精度，移动端降低
-        const particleCount = isMobile ? 1000 : 4000; // 粒子数量，移动端精简
+        const pixelRatio = Math.min(window.devicePixelRatio, isMobile ? 1.2 : 2); // 移动端极致降负载
+        const segmentCount = isMobile ? 16 : 64; // 移动端极致简化几何体
+        const particleCount = isMobile ? 500 : 2000; // 移动端极致精简粒子
 
-        // 家庭配置
+        // 家庭配置（保留你确认的配色）
         const familyConfig = {
             1: { name: '田延芝家庭', color: '#d4af37', baseAngle: 0 },
             2: { name: '田延英家庭', color: '#e27d48', baseAngle: 90 },
@@ -407,8 +352,9 @@
             4: { name: '田玉莲家庭', color: '#8d5fc9', baseAngle: 270 }
         };
 
-        // 家族成员数据
+        // 家族成员数据（完全保留你确认的层级）
         const familyData = [
+            // 核心祖辈
             { 
                 id: 'core', 
                 name: '张明菊', 
@@ -419,7 +365,7 @@
                 orbitRadius: 0,
                 baseAngle: 0
             },
-            // 家庭1
+            // 家庭1：田延芝家
             { 
                 id: 'tianyanzhi', 
                 name: '田延芝', 
@@ -456,7 +402,7 @@
                 baseAngle: familyConfig[1].baseAngle,
                 offsetAngle: 3
             },
-            // 家庭2
+            // 家庭2：田延英家
             { 
                 id: 'tianyanying', 
                 name: '田延英', 
@@ -493,7 +439,7 @@
                 baseAngle: familyConfig[2].baseAngle,
                 offsetAngle: 0
             },
-            // 家庭3
+            // 家庭3：田延兰家
             { 
                 id: 'tianyanlan', 
                 name: '田延兰', 
@@ -530,7 +476,7 @@
                 baseAngle: familyConfig[3].baseAngle,
                 offsetAngle: 0
             },
-            // 家庭4
+            // 家庭4：田玉莲家
             { 
                 id: 'tianyulian', 
                 name: '田玉莲', 
@@ -569,86 +515,97 @@
             },
         ];
 
-        // 相机关键帧
-        const cameraKeyframes = [
-            { position: [0, 0, 55], lookAt: [0, 0, 0], name: '全景' },
-            { position: [0, 0, 38], lookAt: [0, 0, 0], name: '核心' },
-            { position: [22, 12, 28], lookAt: [0, 0, 0], name: '二代' },
-            { position: [35, 18, 22], lookAt: [18, 0, 0], name: '三代' },
-        ];
-
         // 全局变量
-        let scene, camera, renderer, composer;
+        let scene, camera, renderer, controls;
         let galaxyNodes = new Map();
         let relationLines = [];
         let orbitRings = [];
         let particleSystems = [];
         let hoveredNode = null;
         let focusedNode = null;
-        let progress = 0;
-        let targetProgress = 0;
-        let isDragging = false;
-        let isRightDragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
-        // 【核心优化】移动端滑动惯性参数
-        let cameraOffset = { x: 0, y: 0, z: 0 };
-        let velocity = { x: 0, y: 0, z: 0 };
-        let isInerting = false;
-        let touchStartDistance = 0;
-        let isPostProcessingAvailable = !isMobile; // 移动端关闭后处理
         let textureLoader = new THREE.TextureLoader();
-        let lastTime = Date.now();
-        let frameCount = 0;
+        let raycaster = new THREE.Raycaster();
+        let mouse = new THREE.Vector2();
+        let isMoving = false; // 标记是否正在滑动，避免滑动时误触
+        let touchStartTime = 0;
+        let touchStartPos = { x: 0, y: 0 };
 
         // ==================== 初始化 ====================
         function init() {
             try {
+                // 场景初始化
                 scene = new THREE.Scene();
-                scene.fog = new THREE.FogExp2(0x000000, isMobile ? 0.02 : 0.015);
+                scene.fog = new THREE.FogExp2(0x000000, isMobile ? 0.025 : 0.015);
 
-                camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-                camera.position.set(...cameraKeyframes[0].position);
+                // 相机初始化（固定参数，避免滑动混乱）
+                camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(0, 0, 55); // 初始全景视角
+                camera.lookAt(0, 0, 0);
 
+                // 渲染器初始化（极致性能优化）
                 renderer = new THREE.WebGLRenderer({ 
-                    antialias: !isMobile, // 移动端关闭抗锯齿，大幅提升性能
+                    antialias: !isMobile, // 移动端关闭抗锯齿，性能翻倍
                     alpha: true,
                     failIfMajorPerformanceCaveat: false,
                     powerPreference: isMobile ? "low-power" : "high-performance"
                 });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(pixelRatio);
-                renderer.toneMapping = THREE.ACESFilmicToneMapping;
-                renderer.toneMappingExposure = isMobile ? 1.0 : 1.3;
+                renderer.toneMapping = THREE.NoToneMapping; // 移动端关闭色调映射，极致性能
                 document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-                // 桌面端才初始化后处理
-                if (isPostProcessingAvailable && typeof THREE.EffectComposer !== 'undefined') {
-                    try {
-                        initPostProcessing();
-                    } catch (e) {
-                        console.warn('后处理加载失败，已降级', e);
-                        isPostProcessingAvailable = false;
+                // ==================== 【核心根治】原生轨道控制器 ====================
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                // 移动端专属手感配置，完全贴合原生APP
+                controls.enableDamping = true; // 阻尼惯性，丝滑不生硬
+                controls.dampingFactor = isMobile ? 0.08 : 0.05; // 移动端惯性更自然
+                controls.enableZoom = true; // 双指缩放
+                controls.zoomSpeed = isMobile ? 0.8 : 0.7; // 缩放速度适配
+                controls.enablePan = false; // 关闭平移，只保留旋转+缩放，避免操作混乱
+                controls.autoRotate = false; // 关闭自动旋转，完全用户掌控
+                controls.minDistance = 10; // 最小缩放距离，避免穿模
+                controls.maxDistance = 80; // 最大缩放距离，避免看不到画面
+                controls.minPolarAngle = 0; // 上下旋转最小角度
+                controls.maxPolarAngle = Math.PI; // 上下旋转最大角度
+                controls.enableRotate = true; // 开启旋转
+                controls.rotateSpeed = isMobile ? 0.8 : 0.5; // 【关键】旋转灵敏度，手机上滑多少动多少
+                controls.touches = {
+                    ONE: THREE.TOUCH.ROTATE, // 单指=旋转
+                    TWO: THREE.TOUCH.DOLLY_PAN // 双指=缩放
+                };
+
+                // 控制器事件：滑动时标记为移动状态，避免误触
+                controls.addEventListener('start', () => {
+                    isMoving = true;
+                    if (hoveredNode) {
+                        resetNodeHover(hoveredNode);
+                        hoveredNode = null;
+                        updateHoverLabel(0, 0);
                     }
-                }
+                });
+                controls.addEventListener('end', () => {
+                    setTimeout(() => {
+                        isMoving = false;
+                    }, 100); // 滑动结束后延迟100ms再开启点击检测，避免误触
+                });
 
                 // 创建场景内容
                 createOrbitRings();
                 createGalaxyHierarchy();
                 createRelationLines();
-                createParticleSystems();
-                !isMobile && createMilkyWay(); // 移动端关闭银河背景，提升性能
+                isMobile ? createSimpleStarfield() : createParticleSystems(); // 移动端极简星空
 
                 // 事件&UI初始化
                 initEvents();
                 initUI();
                 loadSavedData();
-                initProgressIndicator();
 
                 // 隐藏加载页
                 setTimeout(() => {
                     document.getElementById('loading').classList.add('hidden');
-                }, 800);
+                }, 600);
 
+                // 启动动画循环
                 animate();
             } catch (initError) {
                 console.error('初始化失败', initError);
@@ -656,32 +613,15 @@
             }
         }
 
-        // 后处理初始化（仅桌面端）
-        function initPostProcessing() {
-            composer = new THREE.EffectComposer(renderer);
-            const renderPass = new THREE.RenderPass(scene, camera);
-            composer.addPass(renderPass);
-
-            const bloomPass = new THREE.UnrealBloomPass(
-                new THREE.Vector2(window.innerWidth, window.innerHeight),
-                1.6, 0.05, 0.8
-            );
-            bloomPass.threshold = 0.05;
-            bloomPass.strength = 1.6;
-            bloomPass.radius = 0.8;
-            composer.addPass(bloomPass);
-        }
-
-        // 轨道环创建
+        // ==================== 轨道环创建 ====================
         function createOrbitRings() {
             // 二代轨道环
             const level1RingGeo = new THREE.RingGeometry(17.5, 18.5, segmentCount);
             const level1RingMat = new THREE.MeshBasicMaterial({
                 color: 0xd4af37,
                 transparent: true,
-                opacity: isMobile ? 0.1 : 0.12,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
+                opacity: isMobile ? 0.08 : 0.12,
+                side: THREE.DoubleSide
             });
             const level1Ring = new THREE.Mesh(level1RingGeo, level1RingMat);
             level1Ring.rotation.x = Math.PI / 2;
@@ -693,9 +633,8 @@
             const level2RingMat = new THREE.MeshBasicMaterial({
                 color: 0xf0d78c,
                 transparent: true,
-                opacity: isMobile ? 0.06 : 0.08,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
+                opacity: isMobile ? 0.05 : 0.08,
+                side: THREE.DoubleSide
             });
             const level2Ring = new THREE.Mesh(level2RingGeo, level2RingMat);
             level2Ring.rotation.x = Math.PI / 2;
@@ -703,7 +642,7 @@
             orbitRings.push(level2Ring);
         }
 
-        // 星系层级创建
+        // ==================== 星系层级创建 ====================
         function createGalaxyHierarchy() {
             const maxLevel = Math.max(...familyData.map(m => m.level));
             for (let level = 0; level <= maxLevel; level++) {
@@ -714,11 +653,11 @@
             }
         }
 
-        // 星体创建（移动端简化Shader）
+        // ==================== 星体创建（移动端极致简化）====================
         function createGalaxyNode(member) {
             const group = new THREE.Group();
             
-            // 球体大小按辈分区分
+            // 严格按辈分区分大小
             let sphereRadius;
             switch(member.level) {
                 case 0: sphereRadius = 1.8; break;
@@ -728,38 +667,28 @@
             }
             const geometry = new THREE.SphereGeometry(sphereRadius, segmentCount, segmentCount);
 
-            // 【移动端简化Shader】移除耗性能的噪声计算
+            // 【移动端极简材质】关闭所有耗性能的计算，只保留基础渐变+辉光
             const fragmentShader = isMobile ? `
                 uniform vec3 baseColor;
                 uniform vec3 coreColor;
-                uniform float time;
                 uniform float glowIntensity;
                 uniform float hoverIntensity;
                 uniform sampler2D photoTexture;
                 uniform float hasPhoto;
                 varying vec3 vNormal;
-                varying vec3 vPosition;
                 varying vec2 vUv;
-                varying float vFresnel;
 
                 void main() {
-                    float distFromCenter = length(vPosition);
-                    float coreGradient = 1.0 - smoothstep(0.0, 1.0, distFromCenter);
-                    vec3 base = mix(baseColor, coreColor, coreGradient * 0.8);
+                    float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
+                    vec3 finalColor = mix(baseColor, coreColor, 0.6);
 
                     if (hasPhoto > 0.5) {
                         vec4 photoColor = texture2D(photoTexture, vUv);
-                        base = mix(base, photoColor.rgb, 0.85);
+                        finalColor = mix(finalColor, photoColor.rgb, 0.85);
                     }
 
-                    float innerFresnel = pow(vFresnel, 1.2);
-                    float outerFresnel = pow(vFresnel, 0.6);
-                    vec3 fresnelGlow = innerFresnel * coreColor * (1.0 + hoverIntensity * 2.0);
-                    vec3 outerGlow = outerFresnel * baseColor * (glowIntensity + hoverIntensity);
-                    
-                    vec3 finalColor = base + fresnelGlow + outerGlow;
-                    float alpha = 1.0 + outerFresnel * 0.5;
-                    gl_FragColor = vec4(finalColor, alpha);
+                    finalColor += fresnel * baseColor * (glowIntensity + hoverIntensity);
+                    gl_FragColor = vec4(finalColor, 1.0);
                 }
             ` : `
                 uniform vec3 baseColor;
@@ -772,7 +701,6 @@
                 varying vec3 vNormal;
                 varying vec3 vPosition;
                 varying vec2 vUv;
-                varying float vFresnel;
 
                 float noise(vec2 p) {
                     return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
@@ -792,14 +720,11 @@
                         base = mix(base, photoColor.rgb, 0.85);
                     }
 
-                    float innerFresnel = pow(vFresnel, 1.2);
-                    float outerFresnel = pow(vFresnel, 0.6);
-                    vec3 fresnelGlow = innerFresnel * coreColor * (1.0 + hoverIntensity * 2.0);
-                    vec3 outerGlow = outerFresnel * baseColor * (glowIntensity + hoverIntensity);
+                    float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
+                    vec3 glow = fresnel * baseColor * (glowIntensity + hoverIntensity * 2.0);
                     
-                    vec3 finalColor = base + fresnelGlow + outerGlow;
-                    float alpha = 1.0 + outerFresnel * 0.5;
-                    gl_FragColor = vec4(finalColor, alpha);
+                    vec3 finalColor = base + glow;
+                    gl_FragColor = vec4(finalColor, 1.0);
                 }
             `;
 
@@ -809,7 +734,7 @@
                     baseColor: { value: new THREE.Color(member.color) },
                     coreColor: { value: new THREE.Color(member.isCore ? '#ffffff' : '#fff8e6') },
                     time: { value: 0 },
-                    glowIntensity: { value: member.isCore ? 1.0 : 0.6 },
+                    glowIntensity: { value: member.isCore ? 0.8 : 0.5 },
                     hoverIntensity: { value: 0.0 },
                     photoTexture: { value: null },
                     hasPhoto: { value: 0 }
@@ -818,105 +743,41 @@
                     varying vec3 vNormal;
                     varying vec3 vPosition;
                     varying vec2 vUv;
-                    varying float vFresnel;
                     
                     void main() {
                         vNormal = normalize(normalMatrix * normal);
                         vPosition = position;
                         vUv = uv;
-                        vFresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
                         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                     }
                 `,
                 fragmentShader: fragmentShader,
-                transparent: true,
-                side: THREE.FrontSide
+                transparent: true
             });
 
             const sphere = new THREE.Mesh(geometry, material);
             group.add(sphere);
 
-            // 双层发光环
-            const innerRingGeo = new THREE.RingGeometry(
-                sphereRadius * 1.3, 
-                sphereRadius * 1.5, 
-                segmentCount
-            );
-            const innerRingMat = new THREE.MeshBasicMaterial({
-                color: new THREE.Color(member.color),
-                transparent: true,
-                opacity: member.isCore ? 0.35 : 0.25,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
-            });
-            const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
-            innerRing.rotation.x = Math.PI / 2;
-            group.add(innerRing);
-
-            const outerRingGeo = new THREE.RingGeometry(
-                sphereRadius * 1.8, 
-                sphereRadius * 2.2, 
-                segmentCount
-            );
-            const outerRingMat = new THREE.MeshBasicMaterial({
-                color: new THREE.Color(member.color),
-                transparent: true,
-                opacity: member.isCore ? 0.15 : 0.1,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
-            });
-            const outerRing = new THREE.Mesh(outerRingGeo, outerRingMat);
-            outerRing.rotation.x = Math.PI / 2;
-            group.add(outerRing);
-
-            // 粒子光晕（移动端精简数量）
-            const haloCount = isMobile 
-                ? (member.isCore ? 100 : member.level === 1 ? 60 : 40)
-                : (member.isCore ? 200 : member.level === 1 ? 120 : 80);
-            const haloGeo = new THREE.BufferGeometry();
-            const haloPositions = new Float32Array(haloCount * 3);
-            const haloSizes = new Float32Array(haloCount);
-            for (let i = 0; i < haloCount; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const radius = sphereRadius * 2.2 + Math.random() * 1.2;
-                haloPositions[i * 3] = Math.cos(angle) * radius;
-                haloPositions[i * 3 + 1] = (Math.random() - 0.5) * 0.6;
-                haloPositions[i * 3 + 2] = Math.sin(angle) * radius;
-                haloSizes[i] = 0.04 + Math.random() * 0.06;
+            // 发光环（移动端简化）
+            if (!isMobile) {
+                const innerRingGeo = new THREE.RingGeometry(
+                    sphereRadius * 1.3, 
+                    sphereRadius * 1.5, 
+                    segmentCount
+                );
+                const innerRingMat = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color(member.color),
+                    transparent: true,
+                    opacity: member.isCore ? 0.3 : 0.2,
+                    side: THREE.DoubleSide
+                });
+                const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
+                innerRing.rotation.x = Math.PI / 2;
+                group.add(innerRing);
+                group.userData.innerRing = innerRing;
             }
-            haloGeo.setAttribute('position', new THREE.BufferAttribute(haloPositions, 3));
-            haloGeo.setAttribute('size', new THREE.BufferAttribute(haloSizes, 1));
-            const haloMat = new THREE.ShaderMaterial({
-                uniforms: { time: { value: 0 }, color: { value: new THREE.Color(member.color) } },
-                vertexShader: `
-                    attribute float size;
-                    uniform float time;
-                    varying float vAlpha;
-                    void main() {
-                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                        float twinkle = sin(time * 2.0 + position.x * 10.0) * 0.5 + 0.5;
-                        gl_PointSize = size * (300.0 / -mvPosition.z) * twinkle;
-                        vAlpha = 0.4 + twinkle * 0.6;
-                        gl_Position = projectionMatrix * mvPosition;
-                    }
-                `,
-                fragmentShader: `
-                    uniform vec3 color;
-                    varying float vAlpha;
-                    void main() {
-                        float dist = length(gl_PointCoord - vec2(0.5));
-                        if (dist > 0.5) discard;
-                        float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-                        gl_FragColor = vec4(color, alpha * vAlpha);
-                    }
-                `,
-                transparent: true,
-                blending: THREE.AdditiveBlending
-            });
-            const halo = new THREE.Points(haloGeo, haloMat);
-            group.add(halo);
 
-            // 位置计算
+            // 位置计算（固定位置，不自动公转，用户完全掌控）
             if (member.isCore) {
                 group.position.set(0, 0, 0);
             } else {
@@ -933,23 +794,15 @@
                 ...member,
                 material,
                 sphere,
-                innerRing,
-                outerRing,
-                halo,
-                haloMat,
                 sphereRadius,
-                originalScale: 1,
-                orbitSpeed: member.familyId === 0 ? 0 : 0.05 + member.familyId * 0.01,
-                selfRotateSpeed: isMobile 
-                    ? (member.isCore ? 0.001 : member.level === 1 ? 0.002 : 0.003)
-                    : (member.isCore ? 0.002 : member.level === 1 ? 0.004 : 0.006)
+                originalScale: 1
             };
 
             scene.add(group);
             galaxyNodes.set(member.id, group);
         }
 
-        // 连线创建
+        // ==================== 连线创建 ====================
         function createRelationLines() {
             const coreNode = galaxyNodes.get('core');
             // 祖辈仅连女儿
@@ -977,8 +830,7 @@
             const lineMat = new THREE.LineBasicMaterial({
                 color: new THREE.Color(color),
                 transparent: true,
-                opacity: 0.35,
-                blending: THREE.AdditiveBlending
+                opacity: isMobile ? 0.3 : 0.35
             });
             const line = new THREE.Line(lineGeo, lineMat);
             line.userData = { startNode, endNode };
@@ -986,9 +838,8 @@
             relationLines.push(line);
         }
 
-        // 连线更新（移动端降低频率）
+        // 更新连线位置
         function updateRelationLines() {
-            if (isMobile && frameCount % 2 !== 0) return; // 移动端每2帧更新一次
             relationLines.forEach(line => {
                 const { startNode, endNode } = line.userData;
                 const startPos = startNode.position;
@@ -1005,377 +856,165 @@
             });
         }
 
-        // 粒子系统创建（移动端精简）
-        function createParticleSystems() {
+        // ==================== 星空创建（移动端极简）====================
+        function createSimpleStarfield() {
             const starGeo = new THREE.BufferGeometry();
             const starPositions = new Float32Array(particleCount * 3);
-            const starColors = new Float32Array(particleCount * 3);
-            const starSizes = new Float32Array(particleCount);
-
             for (let i = 0; i < particleCount; i++) {
                 const radius = 150 + Math.random() * 250;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
-                
                 starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
                 starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
                 starPositions[i * 3 + 2] = radius * Math.cos(phi);
-
-                const color = new THREE.Color();
-                color.setHSL(0.1 + Math.random() * 0.15, 0.5, 0.7 + Math.random() * 0.3);
-                starColors[i * 3] = color.r;
-                starColors[i * 3 + 1] = color.g;
-                starColors[i * 3 + 2] = color.b;
-
-                starSizes[i] = Math.random() * 3;
             }
-
             starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-            starGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
-            starGeo.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
-
-            const starMat = new THREE.ShaderMaterial({
-                uniforms: { time: { value: 0 } },
-                vertexShader: `
-                    attribute float size;
-                    attribute vec3 color;
-                    varying vec3 vColor;
-                    uniform float time;
-                    void main() {
-                        vColor = color;
-                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                        float twinkle = sin(time * 1.2 + position.x * 3.0) * 0.5 + 0.5;
-                        gl_PointSize = size * (300.0 / -mvPosition.z) * (0.7 + twinkle * 0.5);
-                        gl_Position = projectionMatrix * mvPosition;
-                    }
-                `,
-                fragmentShader: `
-                    varying vec3 vColor;
-                    void main() {
-                        float dist = length(gl_PointCoord - vec2(0.5));
-                        if (dist > 0.5) discard;
-                        float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-                        gl_FragColor = vec4(vColor, alpha);
-                    }
-                `,
+            const starMat = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.8,
                 transparent: true,
-                blending: THREE.AdditiveBlending
+                opacity: 0.6
             });
-
             const stars = new THREE.Points(starGeo, starMat);
             scene.add(stars);
-            particleSystems.push({ mesh: stars, material: starMat, type: 'stars' });
+            particleSystems.push({ mesh: stars, type: 'stars' });
+        }
 
-            // 移动端关闭涡旋粒子
-            if (!isMobile) {
-                const vortexGeo = new THREE.BufferGeometry();
-                const vortexCount = 300;
-                const vortexPositions = new Float32Array(vortexCount * 3);
-                const vortexColors = new Float32Array(vortexCount * 3);
-
-                for (let i = 0; i < vortexCount; i++) {
-                    const t = i / vortexCount;
-                    const angle = t * Math.PI * 12;
-                    const radius = t * 40;
-                    vortexPositions[i * 3] = Math.cos(angle) * radius;
-                    vortexPositions[i * 3 + 1] = (t - 0.5) * 20;
-                    vortexPositions[i * 3 + 2] = Math.sin(angle) * radius;
-
-                    const color = new THREE.Color();
-                    color.setHSL(0.1, 0.6, 0.5 + t * 0.3);
-                    vortexColors[i * 3] = color.r;
-                    vortexColors[i * 3 + 1] = color.g;
-                    vortexColors[i * 3 + 2] = color.b;
-                }
-
-                vortexGeo.setAttribute('position', new THREE.BufferAttribute(vortexPositions, 3));
-                vortexGeo.setAttribute('color', new THREE.BufferAttribute(vortexColors, 3));
-
-                const vortexMat = new THREE.PointsMaterial({
-                    size: 0.15,
-                    vertexColors: true,
-                    transparent: true,
-                    opacity: 0.6,
-                    blending: THREE.AdditiveBlending
-                });
-
-                const vortex = new THREE.Points(vortexGeo, vortexMat);
-                scene.add(vortex);
-                particleSystems.push({ mesh: vortex, type: 'vortex' });
+        function createParticleSystems() {
+            createSimpleStarfield();
+            // 桌面端额外效果
+            const vortexGeo = new THREE.BufferGeometry();
+            const vortexCount = 300;
+            const vortexPositions = new Float32Array(vortexCount * 3);
+            const vortexColors = new Float32Array(vortexCount * 3);
+            for (let i = 0; i < vortexCount; i++) {
+                const t = i / vortexCount;
+                const angle = t * Math.PI * 12;
+                const radius = t * 40;
+                vortexPositions[i * 3] = Math.cos(angle) * radius;
+                vortexPositions[i * 3 + 1] = (t - 0.5) * 20;
+                vortexPositions[i * 3 + 2] = Math.sin(angle) * radius;
+                const color = new THREE.Color();
+                color.setHSL(0.1, 0.6, 0.5 + t * 0.3);
+                vortexColors[i * 3] = color.r;
+                vortexColors[i * 3 + 1] = color.g;
+                vortexColors[i * 3 + 2] = color.b;
             }
-        }
-
-        // 银河背景（仅桌面端）
-        function createMilkyWay() {
-            const geo = new THREE.PlaneGeometry(600, 600, segmentCount, segmentCount);
-            const mat = new THREE.ShaderMaterial({
-                uniforms: { time: { value: 0 } },
-                vertexShader: `
-                    varying vec2 vUv;
-                    varying vec3 vPosition;
-                    void main() {
-                        vUv = uv;
-                        vPosition = position;
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                    }
-                `,
-                fragmentShader: `
-                    uniform float time;
-                    varying vec2 vUv;
-                    varying vec3 vPosition;
-                    
-                    float noise(vec2 p) {
-                        return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
-                    }
-                    
-                    void main() {
-                        vec2 center = vUv - 0.5;
-                        float dist = length(center);
-                        float ring = smoothstep(0.7, 0.0, dist) * smoothstep(0.1, 0.3, dist);
-                        
-                        float n = noise(vUv * 6.0 + time * 0.003);
-                        vec3 color = vec3(0.9, 0.8, 0.5) * ring * (0.3 + n * 0.7);
-                        float alpha = ring * 0.2;
-                        
-                        gl_FragColor = vec4(color, alpha);
-                    }
-                `,
+            vortexGeo.setAttribute('position', new THREE.BufferAttribute(vortexPositions, 3));
+            vortexGeo.setAttribute('color', new THREE.BufferAttribute(vortexColors, 3));
+            const vortexMat = new THREE.PointsMaterial({
+                size: 0.15,
+                vertexColors: true,
                 transparent: true,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
+                opacity: 0.6
             });
-
-            const milkyWay = new THREE.Mesh(geo, mat);
-            milkyWay.rotation.x = Math.PI / 3;
-            scene.add(milkyWay);
-            particleSystems.push({ mesh: milkyWay, material: mat, type: 'milkyway' });
+            const vortex = new THREE.Points(vortexGeo, vortexMat);
+            scene.add(vortex);
+            particleSystems.push({ mesh: vortex, type: 'vortex' });
         }
 
-        // ==================== 【核心重写】事件监听（移动端优化）====================
+        // ==================== 事件监听 ====================
         function initEvents() {
             window.addEventListener('resize', onWindowResize);
 
-            // 桌面端鼠标事件
-            if (!isMobile) {
-                renderer.domElement.addEventListener('mousemove', onMouseMove);
-                renderer.domElement.addEventListener('mousedown', onMouseDown);
-                renderer.domElement.addEventListener('mouseup', onMouseUp);
-                renderer.domElement.addEventListener('wheel', onWheel, { passive: false });
-                renderer.domElement.addEventListener('contextmenu', e => e.preventDefault());
-            }
-
-            // 【重写】移动端触摸事件
-            if (isMobile) {
-                renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: false });
-                renderer.domElement.addEventListener('touchmove', onTouchMove, { passive: false });
-                renderer.domElement.addEventListener('touchend', onTouchEnd, { passive: false });
-                renderer.domElement.addEventListener('touchcancel', onTouchEnd, { passive: false });
-            }
-
-            // 弹窗关闭事件
-            document.querySelector('#photo-modal .close-modal').onclick = () => {
-                document.getElementById('photo-modal').classList.remove('open');
-            };
-            document.getElementById('photo-modal').onclick = (e) => {
-                if (e.target === document.getElementById('photo-modal')) {
-                    document.getElementById('photo-modal').classList.remove('open');
-                }
-            };
+            // 鼠标/触摸事件
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('click', onClick);
+            renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: true });
+            renderer.domElement.addEventListener('touchend', onTouchEnd, { passive: true });
         }
 
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-            if (isPostProcessingAvailable && composer) {
-                composer.setSize(window.innerWidth, window.innerHeight);
-            }
+            controls.update();
         }
 
-        // 桌面端鼠标事件
+        // 鼠标移动hover检测（仅桌面端）
         function onMouseMove(e) {
-            if (isDragging) {
-                const deltaX = e.clientX - previousMousePosition.x;
-                const deltaY = e.clientY - previousMousePosition.y;
-                cameraOffset.x += deltaX * 0.01;
-                cameraOffset.y -= deltaY * 0.01;
-                velocity.x = deltaX * 0.01;
-                velocity.y = -deltaY * 0.01;
-            } else if (isRightDragging) {
-                const deltaY = e.clientY - previousMousePosition.y;
-                cameraOffset.z += deltaY * 0.05;
-                velocity.z = deltaY * 0.05;
+            if (isMobile || isMoving) return;
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const allSpheres = Array.from(galaxyNodes.values()).map(g => g.userData.sphere);
+            const intersects = raycaster.intersectObjects(allSpheres);
+
+            if (intersects.length > 0) {
+                const node = Array.from(galaxyNodes.values()).find(g => g.userData.sphere === intersects[0].object);
+                if (node && node !== hoveredNode) {
+                    if (hoveredNode) resetNodeHover(hoveredNode);
+                    hoveredNode = node;
+                    setNodeHover(node);
+                }
+                document.body.style.cursor = 'pointer';
             } else {
-                const mouse = new THREE.Vector2(
-                    (e.clientX / window.innerWidth) * 2 - 1,
-                    -(e.clientY / window.innerHeight) * 2 + 1
-                );
-                const raycaster = new THREE.Raycaster();
-                raycaster.setFromCamera(mouse, camera);
-                const allSpheres = Array.from(galaxyNodes.values()).map(g => g.userData.sphere);
-                const intersects = raycaster.intersectObjects(allSpheres);
-
-                if (intersects.length > 0) {
-                    const node = Array.from(galaxyNodes.values()).find(g => g.userData.sphere === intersects[0].object);
-                    if (node && node !== hoveredNode) {
-                        if (hoveredNode) resetNodeHover(hoveredNode);
-                        hoveredNode = node;
-                        setNodeHover(node);
-                    }
-                    document.body.style.cursor = 'pointer';
-                } else {
-                    if (hoveredNode) {
-                        resetNodeHover(hoveredNode);
-                        hoveredNode = null;
-                    }
-                    document.body.style.cursor = 'grab';
+                if (hoveredNode) {
+                    resetNodeHover(hoveredNode);
+                    hoveredNode = null;
                 }
-
-                updateHoverLabel(e.clientX, e.clientY);
+                document.body.style.cursor = 'default';
             }
-
-            previousMousePosition = { x: e.clientX, y: e.clientY };
+            updateHoverLabel(e.clientX, e.clientY);
         }
 
-        function onMouseDown(e) {
-            if (e.button === 0) isDragging = true;
-            if (e.button === 2) isRightDragging = true;
-            document.body.style.cursor = e.button === 0 ? 'grabbing' : 'ew-resize';
-            previousMousePosition = { x: e.clientX, y: e.clientY };
-            velocity = { x: 0, y: 0, z: 0 };
-            isInerting = false;
-        }
-
-        function onMouseUp(e) {
-            if (e.button === 0) {
-                isDragging = false;
-                isInerting = true; // 开启惯性
-                if (hoveredNode && Math.abs(velocity.x) < 0.1 && Math.abs(velocity.y) < 0.1) {
-                    focusedNode = focusedNode === hoveredNode ? null : hoveredNode;
-                    openPhotoModal(hoveredNode);
-                }
-            }
-            if (e.button === 2) {
-                isRightDragging = false;
-                isInerting = true;
-            }
-            document.body.style.cursor = hoveredNode ? 'pointer' : 'grab';
-        }
-
-        function onWheel(e) {
-            e.preventDefault();
-            targetProgress += e.deltaY * 0.001;
-            targetProgress = Math.max(0, Math.min(targetProgress, cameraKeyframes.length - 1));
-        }
-
-        // ==================== 【核心重写】移动端触摸事件 ====================
-        let touchStartX = 0, touchStartY = 0;
-        let touchStartTime = 0;
+        // 触摸开始
         function onTouchStart(e) {
-            e.preventDefault();
             touchStartTime = Date.now();
-            velocity = { x: 0, y: 0, z: 0 };
-            isInerting = false;
-            isDragging = false;
-
-            if (e.touches.length === 1) {
-                // 单指触摸
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-                previousMousePosition = { x: touchStartX, y: touchStartY };
-            } else if (e.touches.length === 2) {
-                // 双指缩放
-                touchStartDistance = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
-            }
+            touchStartPos.x = e.touches[0].clientX;
+            touchStartPos.y = e.touches[0].clientY;
         }
 
-        function onTouchMove(e) {
-            e.preventDefault();
-            isDragging = true;
-
-            if (e.touches.length === 1) {
-                // 单指滑动旋转
-                const currentX = e.touches[0].clientX;
-                const currentY = e.touches[0].clientY;
-                const deltaX = currentX - previousMousePosition.x;
-                const deltaY = currentY - previousMousePosition.y;
-                
-                // 【核心优化】移动端灵敏度提升3倍
-                const sensitivity = 0.03;
-                cameraOffset.x += deltaX * sensitivity;
-                cameraOffset.y -= deltaY * sensitivity;
-                
-                // 记录速度，用于惯性
-                velocity.x = deltaX * sensitivity;
-                velocity.y = -deltaY * sensitivity;
-
-                previousMousePosition = { x: currentX, y: currentY };
-            } else if (e.touches.length === 2) {
-                // 双指缩放
-                const currentDistance = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
-                const delta = currentDistance - touchStartDistance;
-                // 缩放灵敏度优化
-                cameraOffset.z -= delta * 0.02;
-                velocity.z = -delta * 0.02;
-                touchStartDistance = currentDistance;
-            }
-        }
-
+        // 触摸结束（点击检测）
         function onTouchEnd(e) {
-            e.preventDefault();
             const touchEndTime = Date.now();
             const touchDuration = touchEndTime - touchStartTime;
             const touchEndX = e.changedTouches[0]?.clientX || 0;
             const touchEndY = e.changedTouches[0]?.clientY || 0;
-            const deltaMove = Math.hypot(touchEndX - touchStartX, touchEndY - touchStartY);
+            const deltaMove = Math.hypot(touchEndX - touchStartPos.x, touchEndY - touchStartPos.y);
             
-            isDragging = false;
-            isInerting = true; // 开启滑动惯性
-
-            // 点击判断：短时间+小移动距离，判定为点击
-            if (touchDuration < 300 && deltaMove < 15) {
-                // 射线检测点击的星球
-                const mouse = new THREE.Vector2(
-                    (touchEndX / window.innerWidth) * 2 - 1,
-                    -(touchEndY / window.innerHeight) * 2 + 1
-                );
-                const raycaster = new THREE.Raycaster();
+            // 仅短时间+小移动判定为点击，避免滑动误触
+            if (touchDuration < 300 && deltaMove < 15 && !isMoving) {
+                mouse.x = (touchEndX / window.innerWidth) * 2 - 1;
+                mouse.y = -(touchEndY / window.innerHeight) * 2 + 1;
                 raycaster.setFromCamera(mouse, camera);
                 const allSpheres = Array.from(galaxyNodes.values()).map(g => g.userData.sphere);
                 const intersects = raycaster.intersectObjects(allSpheres);
-
                 if (intersects.length > 0) {
                     const node = Array.from(galaxyNodes.values()).find(g => g.userData.sphere === intersects[0].object);
-                    if (node) {
-                        focusedNode = focusedNode === node ? null : node;
-                        openPhotoModal(node);
-                    }
+                    if (node) openPhotoModal(node);
                 }
+            }
+        }
+
+        // 点击事件（桌面端）
+        function onClick(e) {
+            if (isMobile || isMoving) return;
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const allSpheres = Array.from(galaxyNodes.values()).map(g => g.userData.sphere);
+            const intersects = raycaster.intersectObjects(allSpheres);
+            if (intersects.length > 0) {
+                const node = Array.from(galaxyNodes.values()).find(g => g.userData.sphere === intersects[0].object);
+                if (node) openPhotoModal(node);
             }
         }
 
         // ==================== 节点交互 ====================
         function setNodeHover(node) {
             const data = node.userData;
-            data.material.uniforms.glowIntensity.value = data.isCore ? 1.8 : 1.4;
+            data.material.uniforms.glowIntensity.value = data.isCore ? 1.5 : 1.2;
             data.material.uniforms.hoverIntensity.value = 1.0;
-            data.innerRing.material.opacity = data.isCore ? 0.6 : 0.5;
-            data.outerRing.material.opacity = data.isCore ? 0.3 : 0.25;
-            node.scale.lerp(new THREE.Vector3(1.4, 1.4, 1.4), 0.1);
+            if (data.innerRing) data.innerRing.material.opacity = data.isCore ? 0.6 : 0.5;
+            node.scale.lerp(new THREE.Vector3(1.3, 1.3, 1.3), 0.1);
         }
 
         function resetNodeHover(node) {
             const data = node.userData;
-            data.material.uniforms.glowIntensity.value = data.isCore ? 1.0 : 0.6;
+            data.material.uniforms.glowIntensity.value = data.isCore ? 0.8 : 0.5;
             data.material.uniforms.hoverIntensity.value = 0.0;
-            data.innerRing.material.opacity = data.isCore ? 0.35 : 0.25;
-            data.outerRing.material.opacity = data.isCore ? 0.15 : 0.1;
+            if (data.innerRing) data.innerRing.material.opacity = data.isCore ? 0.3 : 0.2;
             node.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
         }
 
@@ -1383,7 +1022,6 @@
             const label = document.getElementById('hover-label');
             if (hoveredNode) {
                 label.textContent = hoveredNode.userData.name;
-                // 移动端标签防溢出
                 const labelWidth = 100;
                 const windowWidth = window.innerWidth;
                 const finalX = x + 15 + labelWidth > windowWidth ? x - labelWidth - 15 : x + 15;
@@ -1445,17 +1083,9 @@
             const musicBtn = document.getElementById('music-btn');
             const bgm = document.getElementById('bgm');
             
-            bgm.onloadeddata = () => console.log('音频加载完成');
-            bgm.onerror = (e) => {
-                console.error('音频加载失败', e);
-                alert('音频文件加载失败，请检查格式');
-            };
-
-            // 移动端兼容：点击页面任意位置解锁音频
+            // 移动端音频解锁
             document.body.addEventListener('click', () => {
-                if (bgm.paused && bgm.src) {
-                    bgm.load();
-                }
+                if (bgm.paused && bgm.src) bgm.load();
             }, { once: true });
 
             musicBtn.onclick = () => {
@@ -1468,13 +1098,22 @@
                         musicBtn.classList.add('playing');
                         musicBtn.textContent = '♫';
                     }).catch(e => {
-                        console.warn('播放失败', e);
                         alert('播放失败，请点击页面后重试');
                     });
                 } else {
                     bgm.pause();
                     musicBtn.classList.remove('playing');
                     musicBtn.textContent = '♪';
+                }
+            };
+
+            // 弹窗关闭
+            document.querySelector('#photo-modal .close-modal').onclick = () => {
+                document.getElementById('photo-modal').classList.remove('open');
+            };
+            document.getElementById('photo-modal').onclick = (e) => {
+                if (e.target === document.getElementById('photo-modal')) {
+                    document.getElementById('photo-modal').classList.remove('open');
                 }
             };
         }
@@ -1499,7 +1138,6 @@
                 alert('上传成功！点击星球即可查看');
                 document.getElementById('photo-input').value = '';
             };
-            reader.onerror = () => alert('读取失败，请重试');
             reader.readAsDataURL(file);
         }
 
@@ -1568,173 +1206,29 @@
             });
         }
 
-        // ==================== 进度指示器 ====================
-        function initProgressIndicator() {
-            const container = document.getElementById('progress-indicator');
-            cameraKeyframes.forEach((_, i) => {
-                const dot = document.createElement('div');
-                dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
-                dot.onclick = () => { targetProgress = i; };
-                container.appendChild(dot);
-            });
-        }
-
-        function updateProgressIndicator() {
-            if (isMobile && frameCount % 3 !== 0) return;
-            const dots = document.querySelectorAll('.progress-dot');
-            const activeIndex = Math.round(progress);
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === activeIndex);
-            });
-        }
-
-        // ==================== 【核心优化】动画循环（带惯性）====================
+        // ==================== 动画循环 ====================
         function animate() {
             requestAnimationFrame(animate);
-            const currentTime = Date.now();
-            const deltaTime = currentTime - lastTime;
-            lastTime = currentTime;
-            frameCount++;
+            const time = Date.now() * 0.001;
 
-            const time = currentTime * 0.001;
+            // 更新控制器（必须每帧调用，阻尼惯性才会生效）
+            controls.update();
 
-            // 【核心优化】滑动惯性计算
-            if (isInerting) {
-                const friction = 0.92; // 摩擦系数，数值越小停的越快
-                velocity.x *= friction;
-                velocity.y *= friction;
-                velocity.z *= friction;
-                
-                cameraOffset.x += velocity.x;
-                cameraOffset.y += velocity.y;
-                cameraOffset.z += velocity.z;
-
-                // 速度足够小时停止惯性
-                if (Math.abs(velocity.x) < 0.001 && Math.abs(velocity.y) < 0.001 && Math.abs(velocity.z) < 0.001) {
-                    isInerting = false;
-                    velocity = { x: 0, y: 0, z: 0 };
-                }
-            }
-
-            // 平滑进度
-            progress += (targetProgress - progress) * 0.05;
-            // 更新相机
-            updateCamera(time);
-            // 更新星体动画
-            updateGalaxyNodes(time);
-            // 更新连线
-            updateRelationLines();
-            // 更新粒子
-            updateParticleSystems(time);
-            // 更新进度指示器
-            updateProgressIndicator();
-
-            // 渲染
-            if (isPostProcessingAvailable && composer) {
-                composer.render();
-            } else {
-                renderer.render(scene, camera);
-            }
-        }
-
-        function updateCamera(time) {
-            const keyIndex = Math.floor(progress);
-            const nextIndex = Math.min(keyIndex + 1, cameraKeyframes.length - 1);
-            const t = progress - keyIndex;
-            const easeT = easeInOutQuart(t);
-
-            const startKey = cameraKeyframes[keyIndex];
-            const endKey = cameraKeyframes[nextIndex];
-
-            let targetPos = new THREE.Vector3(
-                lerp(startKey.position[0], endKey.position[0], easeT),
-                lerp(startKey.position[1], endKey.position[1], easeT),
-                lerp(startKey.position[2], endKey.position[2], easeT)
-            );
-
-            let targetLookAt = new THREE.Vector3(
-                lerp(startKey.lookAt[0], endKey.lookAt[0], easeT),
-                lerp(startKey.lookAt[1], endKey.lookAt[1], easeT),
-                lerp(startKey.lookAt[2], endKey.lookAt[2], easeT)
-            );
-
-            if (focusedNode) {
-                const focusPos = focusedNode.position;
-                targetPos.lerp(focusPos.clone().add(new THREE.Vector3(0, 0, 6)), 0.1);
-                targetLookAt.lerp(focusPos, 0.1);
-            }
-
-            // 应用偏移
-            targetPos.x += cameraOffset.x;
-            targetPos.y += cameraOffset.y;
-            targetPos.z += cameraOffset.z;
-
-            // 相机边界限制，防止滑出边界
-            targetPos.x = Math.max(-60, Math.min(60, targetPos.x));
-            targetPos.y = Math.max(-30, Math.min(30, targetPos.y));
-            targetPos.z = Math.max(10, Math.min(80, targetPos.z));
-
-            // 平滑移动
-            camera.position.lerp(targetPos, isMobile ? 0.1 : 0.05);
-            const lookAt = new THREE.Vector3();
-            lookAt.lerp(targetLookAt, isMobile ? 0.1 : 0.05);
-            camera.lookAt(lookAt);
-        }
-
-        function updateGalaxyNodes(time) {
+            // 更新星体自转（仅自转，不公转，用户完全掌控视角）
             galaxyNodes.forEach(node => {
                 const data = node.userData;
-                
-                // 家庭同步公转
-                if (data.familyId > 0) {
-                    const baseAngleRad = (data.baseAngle + data.offsetAngle) * Math.PI / 180;
-                    const rotateAngle = time * data.orbitSpeed;
-                    const finalAngle = baseAngleRad + rotateAngle;
-                    node.position.x = Math.cos(finalAngle) * data.orbitRadius;
-                    node.position.z = Math.sin(finalAngle) * data.orbitRadius;
-                }
-
-                // 自转
-                node.rotation.y += data.selfRotateSpeed;
-
-                // 呼吸光效
-                const breathe = 1 + Math.sin(time * 1.2 + data.baseAngle) * 0.06;
-                const baseScale = node === hoveredNode ? 1.4 : 1;
-                const targetScale = baseScale * breathe;
-                node.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.05);
-
-                // 环旋转
-                data.innerRing.rotation.z += 0.008;
-                data.outerRing.rotation.z -= 0.004;
-                data.halo.rotation.y += 0.005;
-
-                // 材质时间更新
-                data.material.uniforms.time.value = time;
-                data.haloMat.uniforms.time.value = time;
+                node.rotation.y += data.isCore ? 0.001 : 0.002;
+                if (!isMobile) data.material.uniforms.time.value = time;
             });
+
+            // 更新连线
+            updateRelationLines();
+
+            // 渲染
+            renderer.render(scene, camera);
         }
 
-        function updateParticleSystems(time) {
-            if (isMobile && frameCount % 3 !== 0) return; // 移动端每3帧更新一次
-            particleSystems.forEach(sys => {
-                if (sys.material && sys.material.uniforms && sys.material.uniforms.time) {
-                    sys.material.uniforms.time.value = time;
-                }
-                if (sys.type === 'vortex') {
-                    sys.mesh.rotation.y += 0.001;
-                }
-                if (sys.type === 'milkyway') {
-                    sys.mesh.rotation.z += 0.0002;
-                }
-            });
-        }
-
-        // 工具函数
-        function lerp(a, b, t) { return a + (b - a) * t; }
-        function easeInOutQuart(t) {
-            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
-        }
-
+        // 页面加载完成启动
         window.onload = init;
     </script>
 </body>
