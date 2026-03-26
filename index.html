@@ -89,7 +89,7 @@
         #admin-btn {
             position: fixed;
             top: 20px;
-            right: 80px;
+            right: 20px;
             z-index: 102;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
@@ -101,39 +101,18 @@
             transition: all 0.3s ease;
         }
         #admin-btn:hover { background: rgba(255,255,255,0.2); }
-        /* 重置视角按钮 */
-        #reset-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 102;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #reset-btn:hover { background: rgba(212, 175, 55, 0.2); border-color: #d4af37; }
         #admin-panel {
             position: fixed;
             top: 0;
-            right: -380px;
-            width: 380px;
+            right: -320px;
+            width: 320px;
             height: 100%;
-            background: rgba(0,0,0,0.92);
+            background: rgba(0,0,0,0.9);
             backdrop-filter: blur(20px);
             z-index: 103;
             padding: 20px;
             transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-left: 1px solid rgba(255,255,255,0.1);
-            overflow-y: auto;
         }
         #admin-panel.open { right: 0; }
         #admin-panel h2 {
@@ -172,23 +151,8 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 8px;
         }
         .upload-btn:hover { transform: scale(1.02); }
-        .share-btn {
-            width: 100%;
-            background: rgba(141, 95, 201, 0.3);
-            border: 1px solid rgba(141, 95, 201, 0.5);
-            color: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 8px;
-        }
-        .share-btn:hover { background: rgba(141, 95, 201, 0.5); }
         .close-panel {
             position: absolute;
             top: 20px;
@@ -217,9 +181,6 @@
             cursor: pointer;
             font-size: 18px;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         #music-btn:hover { background: rgba(255,255,255,0.2); }
         #music-btn.playing { background: rgba(212, 175, 55, 0.3); border-color: #d4af37; }
@@ -266,8 +227,8 @@
             gap: 12px;
         }
         .progress-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: rgba(255,255,255,0.3);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -294,7 +255,7 @@
         }
         #photo-modal.open { display: flex; }
         #photo-modal img {
-            max-width: 90%;
+            max-width: 80%;
             max-height: 80%;
             border-radius: 12px;
             border: 2px solid rgba(212, 175, 55, 0.5);
@@ -333,101 +294,6 @@
             display: none;
             max-width: 80%;
         }
-        /* 分享链接弹窗 */
-        #share-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 300;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        #share-modal.open { display: flex; }
-        .share-content {
-            background: rgba(0,0,0,0.9);
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            max-width: 90%;
-            width: 400px;
-        }
-        .share-content h3 {
-            margin-bottom: 15px;
-            color: #d4af37;
-        }
-        .share-content p {
-            margin-bottom: 15px;
-            color: rgba(255,255,255,0.7);
-            font-size: 14px;
-        }
-        #share-link-input {
-            width: 100%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            margin-bottom: 15px;
-            word-break: break-all;
-        }
-        #copy-link-btn {
-            width: 100%;
-            background: linear-gradient(90deg, #8d5fc9, #6b42a8);
-            border: none;
-            color: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        #share-modal .close-modal {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 36px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            #admin-panel {
-                right: -100%;
-                width: 100%;
-            }
-            #admin-btn {
-                right: 70px;
-                padding: 10px 14px;
-                font-size: 13px;
-            }
-            #reset-btn {
-                width: 44px;
-                height: 44px;
-                right: 15px;
-            }
-            #music-btn {
-                width: 44px;
-                height: 44px;
-                left: 15px;
-            }
-            .progress-dot {
-                width: 12px;
-                height: 12px;
-            }
-            .share-content {
-                width: 90%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -435,12 +301,11 @@
     
     <div id="header"><h1>开心聚</h1></div>
     <div id="hover-label"></div>
-    <div id="scroll-hint">滚动缩放 · 拖动旋转</div>
-    <div id="mobile-hint">滑动旋转 · 双指缩放 · 点击查看</div>
+    <div id="scroll-hint">滚动探索</div>
+    <div id="mobile-hint">单指旋转 · 双指平移/缩放 · 点击查看</div>
     
     <button id="music-btn">♪</button>
     <button id="admin-btn">管理</button>
-    <button id="reset-btn" title="重置视角">⟲</button>
     
     <!-- 管理面板 -->
     <div id="admin-panel">
@@ -457,14 +322,6 @@
             <input type="file" id="audio-input" accept="audio/mp3,audio/wav,audio/m4a,audio/mpeg">
             <button class="upload-btn" id="upload-audio-btn">上传音乐</button>
             <p style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:8px;">支持mp3/wav/m4a格式，大小不超过10MB</p>
-        </div>
-        <div class="upload-section">
-            <label>配置分享</label>
-            <button class="upload-btn" id="export-config-btn">导出配置文件</button>
-            <input type="file" id="import-input" accept=".json">
-            <button class="upload-btn" id="import-config-btn">导入配置文件</button>
-            <button class="share-btn" id="gen-share-btn">生成分享链接</button>
-            <p style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:8px;">导出后发给家人，他们导入/打开链接就能直接用，不用重新上传</p>
         </div>
     </div>
     
@@ -486,16 +343,6 @@
         <button class="close-modal">&times;</button>
         <img id="modal-photo" src="" alt="成员照片">
         <div class="modal-name" id="modal-name"></div>
-    </div>
-    <!-- 分享链接弹窗 -->
-    <div id="share-modal">
-        <button class="close-modal">&times;</button>
-        <div class="share-content">
-            <h3>分享链接已生成</h3>
-            <p>把这个链接发给家人，他们打开就能直接看到你整理好的所有内容啦</p>
-            <textarea id="share-link-input" readonly></textarea>
-            <button id="copy-link-btn">复制链接</button>
-        </div>
     </div>
     
     <!-- 背景音乐 -->
@@ -519,6 +366,7 @@
             }, 1000);
         }
         // ==================== 【4个家庭专属配置，同家庭统一配色】====================
+        // 家庭配色：每个家庭一个专属主色，同家庭所有成员统一色系
         const familyConfig = {
             1: { name: '田延芝家庭', color: '#d4af37', baseAngle: 0 },    // 暖金色
             2: { name: '田延英家庭', color: '#e27d48', baseAngle: 90 },   // 暖橘色
@@ -526,6 +374,9 @@
             4: { name: '田玉莲家庭', color: '#8d5fc9', baseAngle: 270 }   // 紫金色
         };
         // ==================== 完整家族成员数据（严格按家庭分组）====================
+        // level 0：祖辈（中心，最大）
+        // level 1：二代（女儿/女婿，中等大小，第二圈）
+        // level 2：三代（孙辈，最小，第三圈，父母正后方）
         const familyData = [
             // 核心祖辈
             { 
@@ -547,9 +398,9 @@
                 parentId: 'core',
                 isMother: true,
                 familyId: 1,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[1].baseAngle,
-                offsetAngle: -5
+                offsetAngle: -5 // 夫妻相邻，左偏移5度
             },
             { 
                 id: 'tanxiaowei', 
@@ -557,9 +408,9 @@
                 level: 2, 
                 color: familyConfig[1].color, 
                 motherId: 'tianyanzhi',
-                fatherId: null,
+                fatherId: null, // 无父亲信息则不连
                 familyId: 1,
-                orbitRadius: 30,
+                orbitRadius: 20, // 缩小轨道
                 baseAngle: familyConfig[1].baseAngle,
                 offsetAngle: -3
             },
@@ -571,7 +422,7 @@
                 motherId: 'tianyanzhi',
                 fatherId: null,
                 familyId: 1,
-                orbitRadius: 30,
+                orbitRadius: 20, // 缩小轨道
                 baseAngle: familyConfig[1].baseAngle,
                 offsetAngle: 3
             },
@@ -584,7 +435,7 @@
                 parentId: 'core',
                 isMother: true,
                 familyId: 2,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[2].baseAngle,
                 offsetAngle: -5
             },
@@ -593,12 +444,12 @@
                 name: '谭元贵', 
                 level: 1, 
                 color: familyConfig[2].color, 
-                parentId: null,
+                parentId: null, // 女婿不连祖辈
                 isFather: true,
                 familyId: 2,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[2].baseAngle,
-                offsetAngle: 5
+                offsetAngle: 5 // 夫妻相邻，右偏移5度
             },
             { 
                 id: 'tanjunna', 
@@ -608,7 +459,7 @@
                 motherId: 'tianyanying',
                 fatherId: 'tanyuangui',
                 familyId: 2,
-                orbitRadius: 30,
+                orbitRadius: 20, // 缩小轨道
                 baseAngle: familyConfig[2].baseAngle,
                 offsetAngle: 0
             },
@@ -621,7 +472,7 @@
                 parentId: 'core',
                 isMother: true,
                 familyId: 3,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[3].baseAngle,
                 offsetAngle: -5
             },
@@ -633,7 +484,7 @@
                 parentId: null,
                 isFather: true,
                 familyId: 3,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[3].baseAngle,
                 offsetAngle: 5
             },
@@ -645,7 +496,7 @@
                 motherId: 'tianyanlan',
                 fatherId: 'chenhongshun',
                 familyId: 3,
-                orbitRadius: 30,
+                orbitRadius: 20, // 缩小轨道
                 baseAngle: familyConfig[3].baseAngle,
                 offsetAngle: 0
             },
@@ -658,7 +509,7 @@
                 parentId: 'core',
                 isMother: true,
                 familyId: 4,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[4].baseAngle,
                 offsetAngle: -5
             },
@@ -670,7 +521,7 @@
                 parentId: null,
                 isFather: true,
                 familyId: 4,
-                orbitRadius: 18,
+                orbitRadius: 12, // 缩小轨道
                 baseAngle: familyConfig[4].baseAngle,
                 offsetAngle: 5
             },
@@ -682,22 +533,22 @@
                 motherId: 'tianyulian',
                 fatherId: 'tanshuai',
                 familyId: 4,
-                orbitRadius: 30,
+                orbitRadius: 20, // 缩小轨道
                 baseAngle: familyConfig[4].baseAngle,
                 offsetAngle: 0
             },
         ];
-        // 相机关键帧（适配三代家庭布局）
+        // 相机关键帧（适配缩小后的轨道）
         const cameraKeyframes = [
-            { position: [0, 0, 55], lookAt: [0, 0, 0], name: '全景' },
-            { position: [0, 0, 38], lookAt: [0, 0, 0], name: '核心祖辈' },
-            { position: [22, 12, 28], lookAt: [0, 0, 0], name: '二代家庭' },
-            { position: [35, 18, 22], lookAt: [18, 0, 0], name: '三代孙辈' },
+            { position: [0, 0, 40], lookAt: [0, 0, 0], name: '全景' },
+            { position: [0, 0, 28], lookAt: [0, 0, 0], name: '核心祖辈' },
+            { position: [15, 8, 20], lookAt: [0, 0, 0], name: '二代家庭' },
+            { position: [25, 12, 15], lookAt: [12, 0, 0], name: '三代孙辈' },
         ];
         // ==================== 全局变量 ====================
         let scene, camera, renderer, composer;
+        let galaxyRoot; // 星系根节点，用于整体旋转
         let galaxyNodes = new Map();
-        let nameSprites = new Map();
         let relationLines = [];
         let orbitRings = [];
         let particleSystems = [];
@@ -717,7 +568,13 @@
         function init() {
             try {
                 scene = new THREE.Scene();
-                scene.fog = new THREE.FogExp2(0x000000, 0.015);
+                // 移除雾效
+                // scene.fog = new THREE.FogExp2(0x000000, 0.015);
+                
+                // 创建星系根节点
+                galaxyRoot = new THREE.Group();
+                scene.add(galaxyRoot);
+                
                 camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
                 camera.position.set(...cameraKeyframes[0].position);
                 renderer = new THREE.WebGLRenderer({ 
@@ -731,7 +588,7 @@
                 renderer.toneMapping = THREE.ACESFilmicToneMapping;
                 renderer.toneMappingExposure = 1.3;
                 document.getElementById('canvas-container').appendChild(renderer.domElement);
-                // 后处理
+                // 后处理（高级柔和辉光）
                 try {
                     initPostProcessing();
                 } catch (e) {
@@ -747,12 +604,8 @@
                 // 事件&UI初始化
                 initEvents();
                 initUI();
-                // 加载hash里的分享配置
-                loadShareConfigFromHash();
                 loadSavedData();
                 initProgressIndicator();
-                // 重置按钮
-                document.getElementById('reset-btn').onclick = resetCamera;
                 // 隐藏加载页
                 setTimeout(() => {
                     document.getElementById('loading').classList.add('hidden');
@@ -763,65 +616,52 @@
                 window.onerror('初始化3D场景失败', '', 0, 0, initError);
             }
         }
-        // 重置相机
-        function resetCamera() {
-            cameraOffset = { x: 0, y: 0, z: 0 };
-            targetProgress = 0;
-            progress = 0;
-            // 隐藏所有名字
-            nameSprites.forEach(sprite => {
-                sprite.visible = false;
-            });
-        }
         // ==================== 后处理 ====================
         function initPostProcessing() {
             composer = new THREE.EffectComposer(renderer);
             const renderPass = new THREE.RenderPass(scene, camera);
             composer.addPass(renderPass);
-            const bloomStrength = isMobile ? 1.2 : 1.6;
             const bloomPass = new THREE.UnrealBloomPass(
                 new THREE.Vector2(window.innerWidth, window.innerHeight),
-                bloomStrength, 0.2, 0.8
+                2.2, 0.2, 0.8
             );
             bloomPass.threshold = 0.05;
-            bloomPass.strength = bloomStrength;
+            bloomPass.strength = 1.6;
             bloomPass.radius = 0.8;
             composer.addPass(bloomPass);
         }
         // ==================== 星系轨道环 ====================
         function createOrbitRings() {
-            // 二代轨道环
-            const level1RingGeo = new THREE.RingGeometry(17.5, 18.5, 128);
-            const level1Mat = new THREE.MeshBasicMaterial({
+            // 二代轨道环，适配缩小后的轨道
+            const level1RingGeo = new THREE.RingGeometry(11.5, 12.5, 128);
+            const level1RingMat = new THREE.MeshBasicMaterial({
                 color: 0xd4af37,
-                transparent: true,
-                opacity: 0.15,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
-            });
-            const level1Ring = new THREE.Mesh(level1RingGeo, level1Mat);
-            level1Ring.rotation.x = Math.PI / 2;
-            level1Ring.userData = { level: 1 };
-            scene.add(level1Ring);
-            orbitRings.push(level1Ring);
-
-            // 三代轨道环
-            const level2RingGeo = new THREE.RingGeometry(29.5, 30.5, 128);
-            const level2Mat = new THREE.MeshBasicMaterial({
-                color: 0xf0d78c,
                 transparent: true,
                 opacity: 0.12,
                 side: THREE.DoubleSide,
                 blending: THREE.AdditiveBlending
             });
-            const level2Ring = new THREE.Mesh(level2RingGeo, level2Mat);
+            const level1Ring = new THREE.Mesh(level1RingGeo, level1RingMat);
+            level1Ring.rotation.x = Math.PI / 2;
+            galaxyRoot.add(level1Ring);
+            orbitRings.push(level1Ring);
+            // 三代轨道环，适配缩小后的轨道
+            const level2RingGeo = new THREE.RingGeometry(19.5, 20.5, 128);
+            const level2RingMat = new THREE.MeshBasicMaterial({
+                color: 0xf0d78c,
+                transparent: true,
+                opacity: 0.08,
+                side: THREE.DoubleSide,
+                blending: THREE.AdditiveBlending
+            });
+            const level2Ring = new THREE.Mesh(level2RingGeo, level2RingMat);
             level2Ring.rotation.x = Math.PI / 2;
-            level2Ring.userData = { level: 2 };
-            scene.add(level2Ring);
+            galaxyRoot.add(level2Ring);
             orbitRings.push(level2Ring);
         }
-        // ==================== 层级化星系创建 ====================
+        // ==================== 层级化星系创建（家庭分组不分散）====================
         function createGalaxyHierarchy() {
+            // 按层级顺序创建：核心→二代→三代
             const maxLevel = Math.max(...familyData.map(m => m.level));
             for (let level = 0; level <= maxLevel; level++) {
                 const levelMembers = familyData.filter(m => m.level === level);
@@ -830,18 +670,20 @@
                 });
             }
         }
-        // ==================== 高级质感星体创建 ====================
+        // ==================== 高级质感星体创建（严格按辈分区分大小）====================
         function createGalaxyNode(member) {
             const group = new THREE.Group();
             
+            // 【严格按辈分区分球体大小】同辈分完全统一
             let sphereRadius;
             switch(member.level) {
-                case 0: sphereRadius = 1.8; break;
-                case 1: sphereRadius = 1.1; break;
-                case 2: sphereRadius = 0.8; break;
+                case 0: sphereRadius = 1.8; break; // 祖辈最大
+                case 1: sphereRadius = 1.1; break; // 二代统一大小
+                case 2: sphereRadius = 0.8; break; // 三代统一大小
                 default: sphereRadius = 0.8;
             }
             const geometry = new THREE.SphereGeometry(sphereRadius, 128, 128);
+            // 高级星体Shader材质
             const material = new THREE.ShaderMaterial({
                 uniforms: {
                     baseColor: { value: new THREE.Color(member.color) },
@@ -850,7 +692,7 @@
                     glowIntensity: { value: member.isCore ? 1.0 : 0.6 },
                     hoverIntensity: { value: 0.0 },
                     photoTexture: { value: null },
-                    hasPhoto: { value: 0 }
+                    hasPhoto: { value: 0 } // 默认不显示照片
                 },
                 vertexShader: `
                     varying vec3 vNormal;
@@ -885,13 +727,16 @@
                         float distFromCenter = length(vPosition);
                         float coreGradient = 1.0 - smoothstep(0.0, 1.0, distFromCenter);
                         vec3 base = mix(baseColor, coreColor, coreGradient * 0.8);
+                        // 动态大气纹理
                         vec2 noiseUv = vUv * 3.0 + vec2(time * 0.1, time * 0.05);
                         float surfaceNoise = noise(noiseUv) * 0.15;
                         base += surfaceNoise * baseColor;
-                        if (hasPhoto > 0.5) {
-                            vec4 photoColor = texture2D(photoTexture, vUv);
-                            base = mix(base, photoColor.rgb, 0.85);
-                        }
+                        // 照片贴图融合（已禁用，不显示在星球上）
+                        // if (hasPhoto > 0.5) {
+                        //     vec4 photoColor = texture2D(photoTexture, vUv);
+                        //     base = mix(base, photoColor.rgb, 0.85);
+                        // }
+                        // 双层菲涅尔辉光
                         float innerFresnel = pow(vFresnel, 1.2);
                         float outerFresnel = pow(vFresnel, 0.6);
                         vec3 fresnelGlow = innerFresnel * coreColor * (1.0 + hoverIntensity * 2.0);
@@ -907,7 +752,7 @@
             });
             const sphere = new THREE.Mesh(geometry, material);
             group.add(sphere);
-            // 发光环
+            // 双层发光环
             const innerRingGeo = new THREE.RingGeometry(
                 sphereRadius * 1.3, 
                 sphereRadius * 1.5, 
@@ -947,7 +792,7 @@
                 const angle = Math.random() * Math.PI * 2;
                 const radius = sphereRadius * 2.2 + Math.random() * 1.2;
                 haloPositions[i * 3] = Math.cos(angle) * radius;
-                haloPositions[i * 3 + 1] = (Math.random() - 0.5) * (member.level === 1 ? 1.5 : 2);
+                haloPositions[i * 3 + 1] = (Math.random() - 0.5) * 0.6;
                 haloPositions[i * 3 + 2] = Math.sin(angle) * radius;
                 haloSizes[i] = 0.04 + Math.random() * 0.06;
             }
@@ -964,16 +809,16 @@
                         float twinkle = sin(time * 2.0 + position.x * 10.0) * 0.5 + 0.5;
                         gl_PointSize = size * (300.0 / -mvPosition.z) * twinkle;
                         vAlpha = 0.4 + twinkle * 0.6;
-                        gl_Position = projectionMatrix * mvPosition;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                     }
-                `,
+                `
+                ,
                 fragmentShader: `
                     uniform vec3 color;
                     varying float vAlpha;
                     void main() {
                         float dist = length(gl_PointCoord - vec2(0.5));
                         if (dist > 0.5) discard;
-                        float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
                         gl_FragColor = vec4(color, alpha * vAlpha);
                     }
                 `,
@@ -982,41 +827,19 @@
             });
             const halo = new THREE.Points(haloGeo, haloMat);
             group.add(halo);
-            // 位置
+            // 【家庭分组布局】同家庭同角度，孙辈在父母正后方
             if (member.isCore) {
                 group.position.set(0, 0, 0);
             } else {
+                // 角度计算：家庭基准角度 + 偏移角度，转弧度
                 const baseAngleRad = (member.baseAngle + member.offsetAngle) * Math.PI / 180;
                 group.position.set(
                     Math.cos(baseAngleRad) * member.orbitRadius,
-                    (Math.random() - 0.5) * (member.level === 1 ? 1.5 : 2),
+                    (Math.random() - 0.5) * (member.level === 1 ? 1.5 : 2), // 轻微高低错落
                     Math.sin(baseAngleRad) * member.orbitRadius
                 );
             }
-            // 名字Sprite
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 256;
-            canvas.height = 64;
-            ctx.fillStyle = `rgba(0,0,0,0)`;
-            ctx.fillRect(0,0,256,64);
-            ctx.font = '32px -apple-system, BlinkMacSystemFont, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = member.color;
-            ctx.fillText(member.name, 128, 40);
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMaterial = new THREE.SpriteMaterial({
-                map: texture,
-                transparent: true,
-                opacity: 0.9
-            });
-            const sprite = new THREE.Sprite(spriteMaterial);
-            sprite.position.y = sphereRadius + 1.5;
-            sprite.scale.set(4, 1, 1);
-            sprite.visible = false;
-            group.add(sprite);
-            nameSprites.set(member.id, sprite);
-            // 节点数据
+            // 节点数据存储
             group.userData = {
                 ...member,
                 material,
@@ -1027,31 +850,37 @@
                 haloMat,
                 sphereRadius,
                 originalScale: 1,
-                orbitSpeed: member.familyId === 0 ? 0 : 0.05 + member.familyId * 0.01,
-                selfRotateSpeed: member.isCore ? 0.002 : member.level === 1 ? 0.004 : 0.006
+                // 统一公转速度，所有家庭同速，永不相撞
+                orbitSpeed: member.familyId === 0 ? 0 : 0.05,
+                selfRotateSpeed: member.isCore ? 0.002 : member.level === 1 ? 0.004 : member.level === 2 ? 0.006 : 0.005
             };
-            scene.add(group);
+            galaxyRoot.add(group);
             galaxyNodes.set(member.id, group);
         }
-        // ==================== 连线 ====================
+        // ==================== 【精准连线规则】====================
         function createRelationLines() {
+            // 1. 祖辈 → 仅和4个女儿连线（不和女婿连线）
             const coreNode = galaxyNodes.get('core');
             familyData.filter(m => m.level === 1 && m.isMother).forEach(member => {
                 const daughterNode = galaxyNodes.get(member.id);
                 createLine(coreNode, daughterNode, member.color);
             });
+            // 2. 孙辈 → 和自己的母亲、父亲都连线
             familyData.filter(m => m.level === 2).forEach(member => {
                 const childNode = galaxyNodes.get(member.id);
+                // 连母亲
                 if (member.motherId) {
                     const motherNode = galaxyNodes.get(member.motherId);
                     if (motherNode) createLine(motherNode, childNode, member.color);
                 }
+                // 连父亲
                 if (member.fatherId) {
                     const fatherNode = galaxyNodes.get(member.fatherId);
                     if (fatherNode) createLine(fatherNode, childNode, member.color);
                 }
             });
         }
+        // 创建单条连线
         function createLine(startNode, endNode, color) {
             const lineGeo = new THREE.BufferGeometry();
             lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
@@ -1063,9 +892,10 @@
             });
             const line = new THREE.Line(lineGeo, lineMat);
             line.userData = { startNode, endNode };
-            scene.add(line);
+            galaxyRoot.add(line);
             relationLines.push(line);
         }
+        // 更新连线位置（随公转动画实时更新）
         function updateRelationLines() {
             relationLines.forEach(line => {
                 const { startNode, endNode } = line.userData;
@@ -1082,10 +912,11 @@
                 line.geometry.attributes.position.needsUpdate = true;
             });
         }
-        // ==================== 背景粒子 ====================
+        // ==================== 背景粒子&银河 ====================
         function createParticleSystems() {
-            const starCount = isMobile ? 2000 : 4000;
+            // 背景星空
             const starGeo = new THREE.BufferGeometry();
+            const starCount = 4000;
             const starPositions = new Float32Array(starCount * 3);
             const starColors = new Float32Array(starCount * 3);
             const starSizes = new Float32Array(starCount);
@@ -1137,9 +968,9 @@
             const stars = new THREE.Points(starGeo, starMat);
             scene.add(stars);
             particleSystems.push({ mesh: stars, material: starMat, type: 'stars' });
-            // 涡旋粒子
+            // 背景涡旋粒子
             const vortexGeo = new THREE.BufferGeometry();
-            const vortexCount = isMobile ? 500 : 1000;
+            const vortexCount = 1000;
             const vortexPositions = new Float32Array(vortexCount * 3);
             const vortexColors = new Float32Array(vortexCount * 3);
             for (let i = 0; i < vortexCount; i++) {
@@ -1232,15 +1063,6 @@
                     document.getElementById('photo-modal').classList.remove('open');
                 }
             };
-            document.querySelector('#share-modal .close-modal').onclick = () => {
-                document.getElementById('share-modal').classList.remove('open');
-            };
-            document.getElementById('copy-link-btn').onclick = () => {
-                const input = document.getElementById('share-link-input');
-                input.select();
-                document.execCommand('copy');
-                alert('链接已复制！');
-            };
         }
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
@@ -1250,61 +1072,67 @@
                 composer.setSize(window.innerWidth, window.innerHeight);
             }
         }
+        
+        // 通用射线检测函数
+        function updateHover(clientX, clientY) {
+            const mouse = new THREE.Vector2(
+                (clientX / window.innerWidth) * 2 - 1,
+                -(clientY / window.innerHeight) * 2 + 1
+            );
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            const allSpheres = Array.from(galaxyNodes.values()).map(g => g.userData.sphere);
+            const intersects = raycaster.intersectObjects(allSpheres);
+            if (intersects.length > 0) {
+                const node = Array.from(galaxyNodes.values()).find(g => g.userData.sphere === intersects[0].object);
+                if (node && node !== hoveredNode) {
+                    if (hoveredNode) resetNodeHover(hoveredNode);
+                    hoveredNode = node;
+                    setNodeHover(node);
+                }
+                document.body.style.cursor = 'pointer';
+            } else {
+                if (hoveredNode) {
+                    resetNodeHover(hoveredNode);
+                    hoveredNode = null;
+                }
+                document.body.style.cursor = 'grab';
+            }
+        }
+        
         function onMouseMove(e) {
             if (isDragging) {
+                // 左键拖动：旋转整个星系
                 const deltaX = e.clientX - previousMousePosition.x;
                 const deltaY = e.clientY - previousMousePosition.y;
-                cameraOffset.x += deltaX * 0.02;
-                cameraOffset.y -= deltaY * 0.02;
+                galaxyRoot.rotation.y += deltaX * 0.01;
+                galaxyRoot.rotation.x += deltaY * 0.01;
             } else if (isRightDragging) {
+                // 右键拖动：平移相机
+                const deltaX = e.clientX - previousMousePosition.x;
                 const deltaY = e.clientY - previousMousePosition.y;
-                cameraOffset.z += deltaY * 0.02;
+                cameraOffset.x += deltaX * 0.05;
+                cameraOffset.y -= deltaY * 0.05;
             } else {
-                const mouse = new THREE.Vector2(
-                    (e.clientX / window.innerWidth) * 2 - 1,
-                    -(e.clientY / window.innerHeight) * 2 + 1
-                );
-                const raycaster = new THREE.Raycaster();
-                raycaster.setFromCamera(mouse, camera);
-                const allSpheres = Array.from(galaxyNodes.values()).map(g => g.userData.sphere);
-                const intersects = raycaster.intersectObjects(allSpheres);
-                if (intersects.length > 0) {
-                    const node = Array.from(galaxyNodes.values()).find(g => g.userData.sphere === intersects[0].object);
-                    if (node && node !== hoveredNode) {
-                        if (hoveredNode) resetNodeHover(hoveredNode);
-                        hoveredNode = node;
-                        setNodeHover(node);
-                    }
-                    document.body.style.cursor = 'pointer';
-                } else {
-                    if (hoveredNode) {
-                        resetNodeHover(hoveredNode);
-                        hoveredNode = null;
-                    }
-                    document.body.style.cursor = 'grab';
-                }
-                updateHoverLabel(e.clientX, e.clientY);
+                // 更新hover状态
+                updateHover(e.clientX, e.clientY);
             }
+            updateHoverLabel(e.clientX, e.clientY);
             previousMousePosition = { x: e.clientX, y: e.clientY };
         }
         function onMouseDown(e) {
             if (e.button === 0) isDragging = true;
             if (e.button === 2) isRightDragging = true;
-            document.body.style.cursor = e.button === 0 ? 'grabbing' : 'ew-resize';
+            document.body.style.cursor = e.button === 0 ? 'grab' : 'move';
             previousMousePosition = { x: e.clientX, y: e.clientY };
         }
         function onMouseUp(e) {
             if (e.button === 0) {
                 isDragging = false;
-                if (hoveredNode) {
-                    // 选中节点，显示名字
-                    if (focusedNode) {
-                        const oldSprite = nameSprites.get(focusedNode.userData.id);
-                        if (oldSprite) oldSprite.visible = false;
-                    }
-                    focusedNode = hoveredNode;
-                    const sprite = nameSprites.get(hoveredNode.userData.id);
-                    if (sprite) sprite.visible = true;
+                // 点击检测
+                const deltaMove = Math.hypot(e.clientX - previousMousePosition.x, e.clientY - previousMousePosition.y);
+                if (deltaMove < 15 && hoveredNode) {
+                    focusedNode = focusedNode === hoveredNode ? null : hoveredNode;
                     openPhotoModal(hoveredNode);
                 }
             }
@@ -1313,11 +1141,12 @@
         }
         function onWheel(e) {
             e.preventDefault();
-            // 滚轮控制缩放
-            cameraOffset.z += e.deltaY * 0.02;
-            // 限制缩放范围
-            cameraOffset.z = Math.max(-20, Math.min(40, cameraOffset.z));
+            targetProgress += e.deltaY * 0.001;
+            targetProgress = Math.max(0, Math.min(targetProgress, cameraKeyframes.length - 1));
+            // 同时也支持滚轮直接缩放相机
+            cameraOffset.z += e.deltaY * 0.05;
         }
+        
         // 触摸事件
         let touchStartX = 0, touchStartY = 0;
         function onTouchStart(e) {
@@ -1337,20 +1166,30 @@
         function onTouchMove(e) {
             e.preventDefault();
             if (e.touches.length === 1 && isDragging) {
+                // 单指滑动：旋转整个星系
                 const deltaX = e.touches[0].clientX - previousMousePosition.x;
                 const deltaY = e.touches[0].clientY - previousMousePosition.y;
-                cameraOffset.x += deltaX * 0.03;
-                cameraOffset.y -= deltaY * 0.03;
+                galaxyRoot.rotation.y += deltaX * 0.01;
+                galaxyRoot.rotation.x += deltaY * 0.01;
+                // 更新hover状态
+                updateHover(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2) {
+                // 双指操作
                 const currentDistance = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
                     e.touches[0].clientY - e.touches[1].clientY
                 );
+                // 双指滑动：平移相机
+                const deltaX = e.touches[0].clientX - previousMousePosition.x;
+                const deltaY = e.touches[0].clientY - previousMousePosition.y;
+                cameraOffset.x += deltaX * 0.05;
+                cameraOffset.y -= deltaY * 0.05;
+                // 双指捏合：缩放相机
                 const delta = currentDistance - touchStartDistance;
-                cameraOffset.z -= delta * 0.03;
-                cameraOffset.z = Math.max(-20, Math.min(40, cameraOffset.z));
+                cameraOffset.z -= delta * 0.05;
                 touchStartDistance = currentDistance;
             }
+            updateHoverLabel(e.touches[0].clientX, e.touches[0].clientY);
             previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         }
         function onTouchEnd(e) {
@@ -1359,14 +1198,9 @@
             const touchEndY = e.changedTouches[0]?.clientY;
             const deltaMove = Math.hypot(touchEndX - touchStartX, touchEndY - touchStartY);
             
-            if (deltaMove < 10 && hoveredNode) {
-                if (focusedNode) {
-                    const oldSprite = nameSprites.get(focusedNode.userData.id);
-                    if (oldSprite) oldSprite.visible = false;
-                }
-                focusedNode = hoveredNode;
-                const sprite = nameSprites.get(hoveredNode.userData.id);
-                if (sprite) sprite.visible = true;
+            // 点击检测，修复移动端点击
+            if (deltaMove < 15 && hoveredNode) {
+                focusedNode = focusedNode === hoveredNode ? null : hoveredNode;
                 openPhotoModal(hoveredNode);
             }
         }
@@ -1400,6 +1234,7 @@
                 label.style.opacity = '0';
             }
         }
+        // 十六进制转RGB
         function hexToRgb(hex) {
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
@@ -1419,6 +1254,7 @@
         }
         // ==================== UI&上传功能 ====================
         function initUI() {
+            // 管理面板开关
             const adminBtn = document.getElementById('admin-btn');
             const adminPanel = document.getElementById('admin-panel');
             const closePanel = document.querySelector('.close-panel');
@@ -1435,36 +1271,37 @@
             });
             // 照片上传
             document.getElementById('upload-photo-btn').onclick = uploadPhoto;
+            
             // 音乐上传
             document.getElementById('upload-audio-btn').onclick = uploadAudio;
-            // 配置导出导入
-            document.getElementById('export-config-btn').onclick = exportConfig;
-            document.getElementById('import-config-btn').onclick = importConfig;
-            // 生成分享链接
-            document.getElementById('gen-share-btn').onclick = genShareLink;
-            // 音乐播放
+            // 音乐播放控制
             const musicBtn = document.getElementById('music-btn');
             const bgm = document.getElementById('bgm');
+            
+            bgm.onloadeddata = () => console.log('音频加载完成');
+            bgm.onerror = (e) => {
+                console.error('音频加载失败', e);
+                alert('音频文件加载失败，请检查文件格式后重新上传');
+            };
             musicBtn.onclick = () => {
                 if (!bgm.src || bgm.src === window.location.href) {
                     alert('请先上传背景音乐');
                     return;
                 }
-                if (bgm.paused) {
-                    bgm.play().then(() => {
-                        musicBtn.classList.add('playing');
-                        musicBtn.textContent = '♫';
-                    }).catch(e => {
-                        console.warn('音频播放失败', e);
-                        alert('播放失败，请点击页面任意位置后重试，或检查浏览器音频权限');
-                    });
-                } else {
-                    bgm.pause();
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                    musicBtn.textContent = '♫';
+                }).catch(e => {
+                    console.warn('音频播放失败', e);
+                    alert('播放失败，请点击页面任意位置后重试，或检查浏览器音频权限');
+                });
+                bgm.onpause = () => {
                     musicBtn.classList.remove('playing');
                     musicBtn.textContent = '♪';
-                }
+                };
             };
         }
+        // 照片上传功能
         function uploadPhoto() {
             const file = document.getElementById('photo-input').files[0];
             const memberId = document.getElementById('member-select').value;
@@ -1480,30 +1317,19 @@
             reader.onload = (e) => {
                 const dataUrl = e.target.result;
                 localStorage.setItem(`photo_${memberId}`, dataUrl);
-                updateNodePhotoTexture(memberId, dataUrl);
+                // 不再更新星球的纹理，只保存照片用于弹窗
+                // updateNodePhotoTexture(memberId, dataUrl);
                 alert('照片上传成功！点击星球即可查看');
                 document.getElementById('photo-input').value = '';
             };
             reader.onerror = () => alert('照片读取失败，请重试');
             reader.readAsDataURL(file);
         }
+        // 更新星球照片贴图（已禁用，不再贴到星球上）
         function updateNodePhotoTexture(memberId, photoUrl) {
-            const node = galaxyNodes.get(memberId);
-            if (!node) return;
-            textureLoader.load(
-                photoUrl,
-                (texture) => {
-                    texture.colorSpace = THREE.SRGBColorSpace;
-                    node.userData.material.uniforms.photoTexture.value = texture;
-                    node.userData.material.uniforms.hasPhoto.value = 1;
-                    node.userData.material.needsUpdate = true;
-                },
-                undefined,
-                (err) => {
-                    console.error('照片纹理加载失败', err);
-                }
-            );
+            // 已禁用，保留函数以防后续需要
         }
+        // 音频上传功能
         function uploadAudio() {
             const file = document.getElementById('audio-input').files[0];
             const bgm = document.getElementById('bgm');
@@ -1537,93 +1363,19 @@
             };
             reader.readAsDataURL(file);
         }
-        // 配置导出
-        function exportConfig() {
-            const config = {};
-            // 导出所有照片
-            familyData.forEach(m => {
-                const photo = localStorage.getItem(`photo_${m.id}`);
-                if (photo) config[`photo_${m.id}`] = photo;
-            });
-            // 导出音乐
-            const audio = localStorage.getItem('bgm_audio');
-            if (audio) config.bgm_audio = audio;
-            const blob = new Blob([JSON.stringify(config)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'family_galaxy_config.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            alert('配置导出成功！');
-        }
-        // 配置导入
-        function importConfig() {
-            const file = document.getElementById('import-input').files[0];
-            if (!file) {
-                alert('请先选择配置文件');
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const config = JSON.parse(e.target.result);
-                    // 导入到localStorage
-                    Object.keys(config).forEach(key => {
-                        localStorage.setItem(key, config[key]);
-                    });
-                    // 重新加载
-                    loadSavedData();
-                    alert('配置导入成功！刷新页面后即可生效');
-                    location.reload();
-                } catch (err) {
-                    alert('配置文件解析失败，请检查文件是否正确');
-                    console.error(err);
-                }
-            };
-            reader.readAsText(file);
-        }
-        // 生成分享链接
-        function genShareLink() {
-            const config = {};
-            familyData.forEach(m => {
-                const photo = localStorage.getItem(`photo_${m.id}`);
-                if (photo) config[`photo_${m.id}`] = photo;
-            });
-            const audio = localStorage.getItem('bgm_audio');
-            if (audio) config.bgm_audio = audio;
-            const configStr = btoa(encodeURIComponent(JSON.stringify(config)));
-            const shareUrl = window.location.origin + window.location.pathname + '#' + configStr;
-            document.getElementById('share-link-input').value = shareUrl;
-            document.getElementById('share-modal').classList.add('open');
-        }
-        // 加载分享配置
-        function loadShareConfigFromHash() {
-            const hash = window.location.hash.slice(1);
-            if (!hash) return;
-            try {
-                const configStr = decodeURIComponent(atob(hash));
-                const config = JSON.parse(configStr);
-                Object.keys(config).forEach(key => {
-                    localStorage.setItem(key, config[key]);
-                });
-                console.log('已加载分享配置');
-            } catch (err) {
-                console.warn('分享配置解析失败', err);
-            }
-        }
-        // 加载已保存的
+        // 加载已保存的照片和音乐
         function loadSavedData() {
             const savedAudio = localStorage.getItem('bgm_audio');
             if (savedAudio) {
                 document.getElementById('bgm').src = savedAudio;
             }
-            familyData.forEach(member => {
-                const savedPhoto = localStorage.getItem(`photo_${member.id}`);
-                if (savedPhoto) {
-                    updateNodePhotoTexture(member.id, savedPhoto);
-                }
-            });
+            // 不再加载照片到星球上，只保留本地存储用于弹窗
+            // familyData.forEach(member => {
+            //     const savedPhoto = localStorage.getItem(`photo_${member.id}`);
+            //     if (savedPhoto) {
+            //         updateNodePhotoTexture(member.id, savedPhoto);
+            //     }
+            // });
         }
         // ==================== 进度指示器 ====================
         function initProgressIndicator() {
@@ -1685,20 +1437,24 @@
             );
             if (focusedNode) {
                 const focusPos = focusedNode.position;
-                targetPos.lerp(focusPos.clone().add(new THREE.Vector3(0, 0, 6)), 0.1);
-                targetLookAt.lerp(focusPos, 0.1);
+                const worldPos = new THREE.Vector3();
+                focusedNode.getWorldPosition(worldPos);
+                targetPos.lerp(worldPos.clone().add(new THREE.Vector3(0, 0, 6)), 0.1);
+                targetLookAt.lerp(worldPos, 0.1);
             }
             targetPos.x += cameraOffset.x;
             targetPos.y += cameraOffset.y;
             targetPos.z += cameraOffset.z;
-            camera.position.lerp(targetPos, 0.15);
+            camera.position.lerp(targetPos, 0.05);
             const lookAt = new THREE.Vector3();
-            lookAt.lerp(targetLookAt, 0.15);
+            lookAt.lerp(targetLookAt, 0.05);
             camera.lookAt(lookAt);
         }
         function updateGalaxyNodes(time) {
             galaxyNodes.forEach(node => {
                 const data = node.userData;
+                
+                // 【家庭同步公转】所有家庭同速，相对位置永久固定
                 if (data.familyId > 0) {
                     const baseAngleRad = (data.baseAngle + data.offsetAngle) * Math.PI / 180;
                     const rotateAngle = time * data.orbitSpeed;
@@ -1706,21 +1462,20 @@
                     node.position.x = Math.cos(finalAngle) * data.orbitRadius;
                     node.position.z = Math.sin(finalAngle) * data.orbitRadius;
                 }
+                // 自转
                 node.rotation.y += data.selfRotateSpeed;
+                // 呼吸光效
                 const breathe = 1 + Math.sin(time * 1.2 + data.baseAngle) * 0.06;
                 const baseScale = node === hoveredNode ? 1.4 : 1;
                 const targetScale = baseScale * breathe;
                 node.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.05);
+                // 环旋转动画
                 data.innerRing.rotation.z += 0.008;
                 data.outerRing.rotation.z -= 0.004;
                 data.halo.rotation.y += 0.005;
+                // 材质时间更新
                 data.material.uniforms.time.value = time;
                 data.haloMat.uniforms.time.value = time;
-                // 更新名字Sprite的位置，跟着星球动
-                const sprite = nameSprites.get(data.id);
-                if (sprite) {
-                    sprite.position.y = data.sphereRadius + 1.5;
-                }
             });
         }
         function updateParticleSystems(time) {
@@ -1731,11 +1486,12 @@
                 if (sys.type === 'vortex') {
                     sys.mesh.rotation.y += 0.001;
                 }
-                if (sys.type === 'milkyWay') {
+                if (sys.type === 'milkyway') {
                     sys.mesh.rotation.z += 0.0002;
                 }
             });
         }
+        // 工具函数
         function lerp(a, b, t) { return a + (b - a) * t; }
         function easeInOutQuart(t) {
             return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
