@@ -564,6 +564,10 @@
         let touchStartDistance = 0;
         let isPostProcessingAvailable = true;
         let textureLoader = new THREE.TextureLoader();
+        // 旋转惯性参数，用于丝滑拖动
+        let rotationVelocity = { x: 0, y: 0 };
+        const inertiaFactor = 0.95; // 惯性衰减系数，越小停得越快
+        const dragSensitivity = 0.008; // 拖动灵敏度，调整手感
         // ==================== 初始化 ====================
         function init() {
             try {
@@ -588,11 +592,15 @@
                 renderer.toneMapping = THREE.ACESFilmicToneMapping;
                 renderer.toneMappingExposure = 1.3;
                 document.getElementById('canvas-container').appendChild(renderer.domElement);
-                // 后处理（高级柔和辉光）
-                try {
-                    initPostProcessing();
-                } catch (e) {
-                    console.warn('后处理特效加载失败，已降级渲染', e);
+                // 后处理（高级柔和辉光），移动端自动禁用避免兼容性问题
+                if (!isMobile) {
+                    try {
+                        initPostProcessing();
+                    } catch (e) {
+                        console.warn('后处理特效加载失败，已降级渲染', e);
+                        isPostProcessingAvailable = false;
+                    }
+                } else {
                     isPostProcessingAvailable = false;
                 }
                 // 星系创建
@@ -823,7 +831,8 @@
                     void main() {
                         float dist = length(gl_PointCoord - vec2(0.5));
                         if (dist > 0.5) discard;
-                        gl_FragColor = vec4(color, alpha * vAlpha);
+                        // 修复未定义的alpha变量，修复移动端编译错误
+                        gl_FragColor = vec4(color, vAlpha);
                     }
                 `,
                 transparent: true,
@@ -1110,11 +1119,15 @@
         
         function onMouseMove(e) {
             if (isDragging) {
-                // 左键拖动：旋转整个星系
+                // 左键拖动：旋转整个星系，带惯性速度记录
                 const deltaX = e.clientX - previousMousePosition.x;
                 const deltaY = e.clientY - previousMousePosition.y;
-                galaxyRoot.rotation.y += deltaX * 0.01;
-                galaxyRoot.rotation.x += deltaY * 0.01;
+                // 更新旋转速度
+                rotationVelocity.y = deltaX * dragSensitivity;
+                rotationVelocity.x = deltaY * dragSensitivity;
+                // 应用旋转
+                galaxyRoot.rotation.y += rotationVelocity.y;
+                galaxyRoot.rotation.x += rotationVelocity.x;
             } else if (isRightDragging) {
                 // 右键拖动：平移相机
                 const deltaX = e.clientX - previousMousePosition.x;
@@ -1129,7 +1142,15 @@
             previousMousePosition = { x: e.clientX, y: e.clientY };
         }
         function onMouseDown(e) {
-            if (e.button === 0) isDragging = true;
+            if (e.button === 0) {
+                isDragging = true;
+                // 开始拖动时清零之前的惯性，避免冲突
+                rotationVelocity = { x: 0, y: 0 };
+                // 开始拖动时取消聚焦状态
+                if (focusedNode) {
+                    focusedNode = null;
+                }
+            }
             if (e.button === 2) isRightDragging = true;
             document.body.style.cursor = e.button === 0 ? 'grab' : 'move';
             previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -1163,8 +1184,12 @@
                 touchStartX = e.touches[0].clientX;
                 touchStartY = e.touches[0].clientY;
                 isDragging = true;
-                // 触摸开始时立即检测hover，确保点击时能命中
-                updateHover(e.touches[0].clientX, e.touches[0].clientY);
+                // 开始拖动时清零之前的惯性，避免冲突
+                rotationVelocity = { x: 0, y: 0 };
+                // 开始拖动时取消聚焦状态
+                if (focusedNode) {
+                    focusedNode = null;
+                }
             } else if (e.touches.length === 2) {
                 touchStartDistance = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
@@ -1176,11 +1201,19 @@
         function onTouchMove(e) {
             e.preventDefault();
             if (e.touches.length === 1 && isDragging) {
-                // 单指滑动：旋转整个星系
+                // 单指滑动：旋转整个星系，带惯性速度记录
                 const deltaX = e.touches[0].clientX - previousMousePosition.x;
                 const deltaY = e.touches[0].clientY - previousMousePosition.y;
-                galaxyRoot.rotation.y += deltaX * 0.01;
-                galaxyRoot.rotation.x += deltaY * 0.01;
+                // 更新旋转速度
+                rotationVelocity.y = deltaX * dragSensitivity;
+                rotationVelocity.x = deltaY * dragSensitivity;
+                // 应用旋转
+                galaxyRoot.rotation.y += rotationVelocity.y;
+                galaxyRoot.rotation.x += rotationVelocity.x;
+                // 开始拖动时取消聚焦状态
+                if (focusedNode) {
+                    focusedNode = null;
+                }
                 // 更新hover状态
                 updateHover(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2) {
@@ -1204,13 +1237,8 @@
         }
         function onTouchEnd(e) {
             isDragging = false;
-            const touch = e.changedTouches[0];
-            const touchEndX = touch.clientX;
-            const touchEndY = touch.clientY;
-            
-            // 触摸结束时再次检测hover，确保点击能命中
-            updateHover(touchEndX, touchEndY);
-            
+            const touchEndX = e.changedTouches[0]?.clientX;
+            const touchEndY = e.changedTouches[0]?.clientY;
             const deltaMove = Math.hypot(touchEndX - touchStartX, touchEndY - touchStartY);
             
             // 点击检测，修复移动端点击
@@ -1416,6 +1444,18 @@
             const time = Date.now() * 0.001;
             // 平滑进度
             progress += (targetProgress - progress) * 0.05;
+            // 应用旋转惯性：非拖动状态下，速度自动衰减
+            if (!isDragging) {
+                // 衰减速度
+                rotationVelocity.x *= inertiaFactor;
+                rotationVelocity.y *= inertiaFactor;
+                // 应用速度到旋转
+                galaxyRoot.rotation.y += rotationVelocity.y;
+                galaxyRoot.rotation.x += rotationVelocity.x;
+                // 速度很小的时候清零，避免一直微转
+                if (Math.abs(rotationVelocity.x) < 0.0001) rotationVelocity.x = 0;
+                if (Math.abs(rotationVelocity.y) < 0.0001) rotationVelocity.y = 0;
+            }
             // 更新相机
             updateCamera(time);
             // 更新星体动画
