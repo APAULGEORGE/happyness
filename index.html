@@ -657,11 +657,13 @@
                 opacity: 0.12,
                 side: THREE.DoubleSide,
                 blending: THREE.AdditiveBlending,
-                depthWrite: false // 关闭深度写入，永远不挡星体
+                depthWrite: false, // 关闭深度写入，永远不挡星体
+                depthTest: false // 关闭深度测试，彻底不影响星体渲染
             });
             const level1Ring = new THREE.Mesh(level1RingGeo, level1RingMat);
             level1Ring.rotation.x = Math.PI / 2;
             level1Ring.renderOrder = -1; // 先渲染轨道环，永远在最底层
+            level1Ring.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             galaxyRoot.add(level1Ring);
             orbitRings.push(level1Ring);
             // 三代轨道环，适配缩小后的轨道
@@ -672,11 +674,13 @@
                 opacity: 0.08,
                 side: THREE.DoubleSide,
                 blending: THREE.AdditiveBlending,
-                depthWrite: false // 关闭深度写入，永远不挡星体
+                depthWrite: false, // 关闭深度写入，永远不挡星体
+                depthTest: false // 关闭深度测试，彻底不影响星体渲染
             });
             const level2Ring = new THREE.Mesh(level2RingGeo, level2RingMat);
             level2Ring.rotation.x = Math.PI / 2;
             level2Ring.renderOrder = -1; // 先渲染轨道环，永远在最底层
+            level2Ring.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             galaxyRoot.add(level2Ring);
             orbitRings.push(level2Ring);
         }
@@ -694,6 +698,7 @@
         // ==================== 高级质感星体创建（严格按辈分区分大小）====================
         function createGalaxyNode(member) {
             const group = new THREE.Group();
+            group.frustumCulled = false; // 关闭视锥体剔除，永远渲染，不会消失
             
             // 【严格按辈分区分球体大小】同辈分完全统一
             let sphereRadius;
@@ -774,6 +779,7 @@
                 side: THREE.FrontSide
             });
             const sphere = new THREE.Mesh(geometry, material);
+            sphere.frustumCulled = false; // 关闭视锥体剔除，永远渲染，不会消失
             group.add(sphere);
             // 双层发光环
             const innerRingGeo = new THREE.RingGeometry(
@@ -790,6 +796,7 @@
             });
             const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
             innerRing.rotation.x = Math.PI / 2;
+            innerRing.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             group.add(innerRing);
             const outerRingGeo = new THREE.RingGeometry(
                 sphereRadius * 1.8, 
@@ -805,6 +812,7 @@
             });
             const outerRing = new THREE.Mesh(outerRingGeo, outerRingMat);
             outerRing.rotation.x = Math.PI / 2;
+            outerRing.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             group.add(outerRing);
             // 粒子光晕
             const haloCount = member.isCore ? 200 : member.level === 1 ? 120 : 80;
@@ -852,6 +860,7 @@
                 blending: THREE.AdditiveBlending
             });
             const halo = new THREE.Points(haloGeo, haloMat);
+            halo.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             group.add(halo);
             // 【家庭分组布局】同家庭同角度，孙辈在父母正后方
             if (member.isCore) {
@@ -917,6 +926,7 @@
                 blending: THREE.AdditiveBlending
             });
             const line = new THREE.Line(lineGeo, lineMat);
+            line.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             line.userData = { startNode, endNode };
             galaxyRoot.add(line);
             relationLines.push(line);
@@ -994,6 +1004,7 @@
                 blending: THREE.AdditiveBlending
             });
             const stars = new THREE.Points(starGeo, starMat);
+            stars.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             galaxyRoot.add(stars);
             particleSystems.push({ mesh: stars, material: starMat, type: 'stars' });
             // 背景涡旋粒子
@@ -1024,6 +1035,7 @@
                 blending: THREE.AdditiveBlending
             });
             const vortex = new THREE.Points(vortexGeo, vortexMat);
+            vortex.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             galaxyRoot.add(vortex);
             particleSystems.push({ mesh: vortex, type: 'vortex' });
         }
@@ -1069,6 +1081,7 @@
             });
             const milkyWay = new THREE.Mesh(geo, mat);
             milkyWay.rotation.x = Math.PI / 3;
+            milkyWay.frustumCulled = false; // 关闭视锥体剔除，永远渲染
             galaxyRoot.add(milkyWay);
             particleSystems.push({ mesh: milkyWay, material: mat, type: 'milkyway' });
         }
@@ -1132,26 +1145,15 @@
         
         function onMouseMove(e) {
             if (isDragging) {
-                // 左键拖动：相机绕星系旋转，带惯性速度记录
+                // 左键拖动：星系旋转，相机不动，保留你习惯的交互
                 const deltaX = e.clientX - previousMousePosition.x;
                 const deltaY = e.clientY - previousMousePosition.y;
                 // 更新旋转速度
                 rotationVelocity.y = deltaX * dragSensitivity;
                 rotationVelocity.x = deltaY * dragSensitivity;
-                // 应用旋转：相机绕中心旋转，星系不动
-                const center = new THREE.Vector3(0, 0, 0);
-                // 绕Y轴旋转（左右拖动）
-                const rotationY = new THREE.Matrix4().makeRotationY(rotationVelocity.y);
-                camera.position.sub(center);
-                camera.position.applyMatrix4(rotationY);
-                camera.position.add(center);
-                // 绕X轴旋转（上下拖动）
-                const rotationX = new THREE.Matrix4().makeRotationX(rotationVelocity.x);
-                camera.position.sub(center);
-                camera.position.applyMatrix4(rotationX);
-                camera.position.add(center);
-                // 相机永远看向中心
-                camera.lookAt(center);
+                // 应用旋转：星系旋转，相机不动
+                galaxyRoot.rotation.y += rotationVelocity.y;
+                galaxyRoot.rotation.x += rotationVelocity.x;
             } else if (isRightDragging) {
                 // 右键拖动：平移相机
                 const deltaX = e.clientX - previousMousePosition.x;
@@ -1232,26 +1234,15 @@
         function onTouchMove(e) {
             e.preventDefault();
             if (e.touches.length === 1 && isDragging) {
-                // 单指滑动：相机绕星系旋转，带惯性速度记录
+                // 单指滑动：星系旋转，相机不动，保留你习惯的交互
                 const deltaX = e.touches[0].clientX - previousMousePosition.x;
                 const deltaY = e.touches[0].clientY - previousMousePosition.y;
                 // 更新旋转速度
                 rotationVelocity.y = deltaX * dragSensitivity;
                 rotationVelocity.x = deltaY * dragSensitivity;
-                // 应用旋转：相机绕中心旋转，星系不动
-                const center = new THREE.Vector3(0, 0, 0);
-                // 绕Y轴旋转
-                const rotationY = new THREE.Matrix4().makeRotationY(rotationVelocity.y);
-                camera.position.sub(center);
-                camera.position.applyMatrix4(rotationY);
-                camera.position.add(center);
-                // 绕X轴旋转
-                const rotationX = new THREE.Matrix4().makeRotationX(rotationVelocity.x);
-                camera.position.sub(center);
-                camera.position.applyMatrix4(rotationX);
-                camera.position.add(center);
-                // 相机永远看向中心
-                camera.lookAt(center);
+                // 应用旋转：星系旋转，相机不动
+                galaxyRoot.rotation.y += rotationVelocity.y;
+                galaxyRoot.rotation.x += rotationVelocity.x;
                 // 更新hover状态
                 updateHover(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2) {
@@ -1348,8 +1339,8 @@
             const camDir = camera.getWorldDirection(new THREE.Vector3());
             focusStartLookAt.copy(new THREE.Vector3().setFromMatrixPosition(camera.matrixWorld).add(camDir));
             
-            // 计算目标相机位置：星体的正前方5个单位，避免过度放大
-            focusTargetPos.copy(worldPos.clone().add(new THREE.Vector3(0, 0, 5)));
+            // 计算目标相机位置：星体的正前方7个单位，适配手机屏幕，避免过度放大
+            focusTargetPos.copy(worldPos.clone().add(new THREE.Vector3(0, 0, 7)));
             // 目标lookAt就是星体本身
             focusTargetLookAt.copy(worldPos);
             
@@ -1520,21 +1511,10 @@
                 // 衰减速度
                 rotationVelocity.x *= inertiaFactor;
                 rotationVelocity.y *= inertiaFactor;
-                // 应用速度到相机旋转
+                // 应用速度到星系旋转
                 if (Math.abs(rotationVelocity.x) > 0.0001 || Math.abs(rotationVelocity.y) > 0.0001) {
-                    const center = new THREE.Vector3(0, 0, 0);
-                    // 绕Y轴旋转
-                    const rotationY = new THREE.Matrix4().makeRotationY(rotationVelocity.y);
-                    camera.position.sub(center);
-                    camera.position.applyMatrix4(rotationY);
-                    camera.position.add(center);
-                    // 绕X轴旋转
-                    const rotationX = new THREE.Matrix4().makeRotationX(rotationVelocity.x);
-                    camera.position.sub(center);
-                    camera.position.applyMatrix4(rotationX);
-                    camera.position.add(center);
-                    // 相机永远看向中心
-                    camera.lookAt(center);
+                    galaxyRoot.rotation.y += rotationVelocity.y;
+                    galaxyRoot.rotation.x += rotationVelocity.x;
                 }
                 // 速度很小的时候清零，避免一直微转
                 if (Math.abs(rotationVelocity.x) < 0.0001) rotationVelocity.x = 0;
