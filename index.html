@@ -695,6 +695,7 @@
                     hasPhoto: { value: 0 } // 默认不显示照片
                 },
                 vertexShader: `
+                    precision mediump float;
                     varying vec3 vNormal;
                     varying vec3 vPosition;
                     varying vec2 vUv;
@@ -709,6 +710,7 @@
                     }
                 `,
                 fragmentShader: `
+                    precision mediump float;
                     uniform vec3 baseColor;
                     uniform vec3 coreColor;
                     uniform float time;
@@ -801,6 +803,7 @@
             const haloMat = new THREE.ShaderMaterial({
                 uniforms: { time: { value: 0 }, color: { value: new THREE.Color(member.color) } },
                 vertexShader: `
+                    precision mediump float;
                     attribute float size;
                     uniform float time;
                     varying float vAlpha;
@@ -814,6 +817,7 @@
                 `
                 ,
                 fragmentShader: `
+                    precision mediump float;
                     uniform vec3 color;
                     varying float vAlpha;
                     void main() {
@@ -941,6 +945,7 @@
             const starMat = new THREE.ShaderMaterial({
                 uniforms: { time: { value: 0 } },
                 vertexShader: `
+                    precision mediump float;
                     attribute float size;
                     attribute vec3 color;
                     varying vec3 vColor;
@@ -954,6 +959,7 @@
                     }
                 `,
                 fragmentShader: `
+                    precision mediump float;
                     varying vec3 vColor;
                     void main() {
                         float dist = length(gl_PointCoord - vec2(0.5));
@@ -1004,6 +1010,7 @@
             const mat = new THREE.ShaderMaterial({
                 uniforms: { time: { value: 0 } },
                 vertexShader: `
+                    precision mediump float;
                     varying vec2 vUv;
                     varying vec3 vPosition;
                     void main() {
@@ -1013,6 +1020,7 @@
                     }
                 `,
                 fragmentShader: `
+                    precision mediump float;
                     uniform float time;
                     varying vec2 vUv;
                     varying vec3 vPosition;
@@ -1155,6 +1163,8 @@
                 touchStartX = e.touches[0].clientX;
                 touchStartY = e.touches[0].clientY;
                 isDragging = true;
+                // 触摸开始时立即检测hover，确保点击时能命中
+                updateHover(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2) {
                 touchStartDistance = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
@@ -1194,8 +1204,13 @@
         }
         function onTouchEnd(e) {
             isDragging = false;
-            const touchEndX = e.changedTouches[0]?.clientX;
-            const touchEndY = e.changedTouches[0]?.clientY;
+            const touch = e.changedTouches[0];
+            const touchEndX = touch.clientX;
+            const touchEndY = touch.clientY;
+            
+            // 触摸结束时再次检测hover，确保点击能命中
+            updateHover(touchEndX, touchEndY);
+            
             const deltaMove = Math.hypot(touchEndX - touchStartX, touchEndY - touchStartY);
             
             // 点击检测，修复移动端点击
