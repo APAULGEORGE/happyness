@@ -566,8 +566,8 @@
         let textureLoader = new THREE.TextureLoader();
         // 旋转惯性参数，用于丝滑拖动
         let rotationVelocity = { x: 0, y: 0 };
-        const inertiaFactor = 0.95; // 惯性衰减系数，越小停得越快
-        const dragSensitivity = 0.008; // 拖动灵敏度，调整手感
+        const inertiaFactor = 0.98; // 惯性衰减系数，越小停得越快，调大后惯性更持久更丝滑
+        const dragSensitivity = 0.004; // 拖动灵敏度，调整手感，调低后不会一滑就转大角度
         // ==================== 初始化 ====================
         function init() {
             try {
@@ -981,7 +981,7 @@
                 blending: THREE.AdditiveBlending
             });
             const stars = new THREE.Points(starGeo, starMat);
-            scene.add(stars);
+            galaxyRoot.add(stars);
             particleSystems.push({ mesh: stars, material: starMat, type: 'stars' });
             // 背景涡旋粒子
             const vortexGeo = new THREE.BufferGeometry();
@@ -1011,7 +1011,7 @@
                 blending: THREE.AdditiveBlending
             });
             const vortex = new THREE.Points(vortexGeo, vortexMat);
-            scene.add(vortex);
+            galaxyRoot.add(vortex);
             particleSystems.push({ mesh: vortex, type: 'vortex' });
         }
         function createMilkyWay() {
@@ -1056,7 +1056,7 @@
             });
             const milkyWay = new THREE.Mesh(geo, mat);
             milkyWay.rotation.x = Math.PI / 3;
-            scene.add(milkyWay);
+            galaxyRoot.add(milkyWay);
             particleSystems.push({ mesh: milkyWay, material: mat, type: 'milkyway' });
         }
         // ==================== 事件监听 ====================
@@ -1239,6 +1239,8 @@
             isDragging = false;
             const touchEndX = e.changedTouches[0]?.clientX;
             const touchEndY = e.changedTouches[0]?.clientY;
+            // 点击前补一次节点检测，确保移动端点击也能识别到星体
+            updateHover(touchEndX, touchEndY);
             const deltaMove = Math.hypot(touchEndX - touchStartX, touchEndY - touchStartY);
             
             // 点击检测，修复移动端点击
