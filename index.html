@@ -568,6 +568,15 @@
         let rotationVelocity = { x: 0, y: 0 };
         const inertiaFactor = 0.98; // 惯性衰减系数，越小停得越快，调大后惯性更持久更丝滑
         const dragSensitivity = 0.004; // 拖动灵敏度，调整手感，调低后不会一滑就转大角度
+        // 聚焦动画状态
+        let isFocusing = false;
+        let isFocused = false; // 永久聚焦状态
+        let focusStartPos = new THREE.Vector3();
+        let focusTargetPos = new THREE.Vector3();
+        let focusStartLookAt = new THREE.Vector3();
+        let focusTargetLookAt = new THREE.Vector3();
+        let focusStartTime = 0;
+        const FOCUS_DURATION = 800; // 聚焦动画时长，毫秒
         // ==================== 初始化 ====================
         function init() {
             try {
@@ -647,10 +656,12 @@
                 transparent: true,
                 opacity: 0.12,
                 side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
+                blending: THREE.AdditiveBlending,
+                depthWrite: false // 关闭深度写入，永远不挡星体
             });
             const level1Ring = new THREE.Mesh(level1RingGeo, level1RingMat);
             level1Ring.rotation.x = Math.PI / 2;
+            level1Ring.renderOrder = -1; // 先渲染轨道环，永远在最底层
             galaxyRoot.add(level1Ring);
             orbitRings.push(level1Ring);
             // 三代轨道环，适配缩小后的轨道
@@ -660,10 +671,12 @@
                 transparent: true,
                 opacity: 0.08,
                 side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
+                blending: THREE.AdditiveBlending,
+                depthWrite: false // 关闭深度写入，永远不挡星体
             });
             const level2Ring = new THREE.Mesh(level2RingGeo, level2RingMat);
             level2Ring.rotation.x = Math.PI / 2;
+            level2Ring.renderOrder = -1; // 先渲染轨道环，永远在最底层
             galaxyRoot.add(level2Ring);
             orbitRings.push(level2Ring);
         }
@@ -1119,15 +1132,26 @@
         
         function onMouseMove(e) {
             if (isDragging) {
-                // 左键拖动：旋转整个星系，带惯性速度记录
+                // 左键拖动：相机绕星系旋转，带惯性速度记录
                 const deltaX = e.clientX - previousMousePosition.x;
                 const deltaY = e.clientY - previousMousePosition.y;
                 // 更新旋转速度
                 rotationVelocity.y = deltaX * dragSensitivity;
                 rotationVelocity.x = deltaY * dragSensitivity;
-                // 应用旋转
-                galaxyRoot.rotation.y += rotationVelocity.y;
-                galaxyRoot.rotation.x += rotationVelocity.x;
+                // 应用旋转：相机绕中心旋转，星系不动
+                const center = new THREE.Vector3(0, 0, 0);
+                // 绕Y轴旋转（左右拖动）
+                const rotationY = new THREE.Matrix4().makeRotationY(rotationVelocity.y);
+                camera.position.sub(center);
+                camera.position.applyMatrix4(rotationY);
+                camera.position.add(center);
+                // 绕X轴旋转（上下拖动）
+                const rotationX = new THREE.Matrix4().makeRotationX(rotationVelocity.x);
+                camera.position.sub(center);
+                camera.position.applyMatrix4(rotationX);
+                camera.position.add(center);
+                // 相机永远看向中心
+                camera.lookAt(center);
             } else if (isRightDragging) {
                 // 右键拖动：平移相机
                 const deltaX = e.clientX - previousMousePosition.x;
@@ -1142,14 +1166,18 @@
             previousMousePosition = { x: e.clientX, y: e.clientY };
         }
         function onMouseDown(e) {
+            // 如果正在聚焦/已聚焦，手动操作则取消聚焦状态
+            if (isFocusing) {
+                isFocusing = false;
+            }
+            if (isFocused) {
+                isFocused = false; // 手动拖动，退出永久聚焦
+            }
+            
             if (e.button === 0) {
                 isDragging = true;
                 // 开始拖动时清零之前的惯性，避免冲突
                 rotationVelocity = { x: 0, y: 0 };
-                // 开始拖动时取消聚焦状态
-                if (focusedNode) {
-                    focusedNode = null;
-                }
             }
             if (e.button === 2) isRightDragging = true;
             document.body.style.cursor = e.button === 0 ? 'grab' : 'move';
@@ -1161,8 +1189,7 @@
                 // 点击检测
                 const deltaMove = Math.hypot(e.clientX - previousMousePosition.x, e.clientY - previousMousePosition.y);
                 if (deltaMove < 15 && hoveredNode) {
-                    focusedNode = focusedNode === hoveredNode ? null : hoveredNode;
-                    openPhotoModal(hoveredNode);
+                    startFocusAnimation(hoveredNode);
                 }
             }
             if (e.button === 2) isRightDragging = false;
@@ -1180,16 +1207,20 @@
         let touchStartX = 0, touchStartY = 0;
         function onTouchStart(e) {
             e.preventDefault();
+            // 如果正在聚焦/已聚焦，手动操作则取消聚焦状态
+            if (isFocusing) {
+                isFocusing = false;
+            }
+            if (isFocused) {
+                isFocused = false; // 手动拖动，退出永久聚焦
+            }
+            
             if (e.touches.length === 1) {
                 touchStartX = e.touches[0].clientX;
                 touchStartY = e.touches[0].clientY;
                 isDragging = true;
                 // 开始拖动时清零之前的惯性，避免冲突
                 rotationVelocity = { x: 0, y: 0 };
-                // 开始拖动时取消聚焦状态
-                if (focusedNode) {
-                    focusedNode = null;
-                }
             } else if (e.touches.length === 2) {
                 touchStartDistance = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
@@ -1201,19 +1232,26 @@
         function onTouchMove(e) {
             e.preventDefault();
             if (e.touches.length === 1 && isDragging) {
-                // 单指滑动：旋转整个星系，带惯性速度记录
+                // 单指滑动：相机绕星系旋转，带惯性速度记录
                 const deltaX = e.touches[0].clientX - previousMousePosition.x;
                 const deltaY = e.touches[0].clientY - previousMousePosition.y;
                 // 更新旋转速度
                 rotationVelocity.y = deltaX * dragSensitivity;
                 rotationVelocity.x = deltaY * dragSensitivity;
-                // 应用旋转
-                galaxyRoot.rotation.y += rotationVelocity.y;
-                galaxyRoot.rotation.x += rotationVelocity.x;
-                // 开始拖动时取消聚焦状态
-                if (focusedNode) {
-                    focusedNode = null;
-                }
+                // 应用旋转：相机绕中心旋转，星系不动
+                const center = new THREE.Vector3(0, 0, 0);
+                // 绕Y轴旋转
+                const rotationY = new THREE.Matrix4().makeRotationY(rotationVelocity.y);
+                camera.position.sub(center);
+                camera.position.applyMatrix4(rotationY);
+                camera.position.add(center);
+                // 绕X轴旋转
+                const rotationX = new THREE.Matrix4().makeRotationX(rotationVelocity.x);
+                camera.position.sub(center);
+                camera.position.applyMatrix4(rotationX);
+                camera.position.add(center);
+                // 相机永远看向中心
+                camera.lookAt(center);
                 // 更新hover状态
                 updateHover(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2) {
@@ -1245,8 +1283,7 @@
             
             // 点击检测，修复移动端点击
             if (deltaMove < 15 && hoveredNode) {
-                focusedNode = focusedNode === hoveredNode ? null : hoveredNode;
-                openPhotoModal(hoveredNode);
+                startFocusAnimation(hoveredNode);
             }
         }
         // ==================== 节点hover交互 ====================
@@ -1297,6 +1334,29 @@
             document.getElementById('modal-name').textContent = data.name;
             document.getElementById('photo-modal').classList.add('open');
         }
+        // ==================== 聚焦动画 ====================
+        function startFocusAnimation(node) {
+            // 清零之前的相机偏移，保证聚焦精准
+            cameraOffset = { x: 0, y: 0, z: 0 };
+            
+            // 获取星体的世界坐标
+            const worldPos = new THREE.Vector3();
+            node.getWorldPosition(worldPos);
+            
+            // 记录动画开始时的相机状态
+            focusStartPos.copy(camera.position);
+            const camDir = camera.getWorldDirection(new THREE.Vector3());
+            focusStartLookAt.copy(new THREE.Vector3().setFromMatrixPosition(camera.matrixWorld).add(camDir));
+            
+            // 计算目标相机位置：星体的正前方5个单位，避免过度放大
+            focusTargetPos.copy(worldPos.clone().add(new THREE.Vector3(0, 0, 5)));
+            // 目标lookAt就是星体本身
+            focusTargetLookAt.copy(worldPos);
+            
+            // 记录开始时间，启动聚焦动画
+            focusStartTime = Date.now();
+            isFocusing = true;
+        }
         // ==================== UI&上传功能 ====================
         function initUI() {
             // 管理面板开关
@@ -1333,17 +1393,19 @@
                     alert('请先上传背景音乐');
                     return;
                 }
-                bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                    musicBtn.textContent = '♫';
-                }).catch(e => {
-                    console.warn('音频播放失败', e);
-                    alert('播放失败，请点击页面任意位置后重试，或检查浏览器音频权限');
-                });
-                bgm.onpause = () => {
+                if (bgm.paused) {
+                    bgm.play().then(() => {
+                        musicBtn.classList.add('playing');
+                        musicBtn.textContent = '♫';
+                    }).catch(e => {
+                        console.warn('音频播放失败', e);
+                        alert('播放失败，请点击页面任意位置后重试，或检查浏览器音频权限');
+                    });
+                } else {
+                    bgm.pause();
                     musicBtn.classList.remove('playing');
                     musicBtn.textContent = '♪';
-                };
+                }
             };
         }
         // 照片上传功能
@@ -1396,6 +1458,13 @@
                 localStorage.setItem('bgm_audio', dataUrl);
                 bgm.src = dataUrl;
                 bgm.load();
+                // 上传完成后自动播放音乐
+                bgm.play().catch(e => {
+                    // 兼容部分浏览器的自动播放限制，失败了用户可以手动点
+                    console.log('自动播放被拦截，可手动点击播放按钮', e);
+                });
+                isMusicPlaying = true;
+                musicBtn.innerHTML = '🔇';
                 document.getElementById('upload-audio-btn').textContent = '上传音乐';
                 document.getElementById('upload-audio-btn').disabled = false;
                 alert('音乐上传成功！点击左上角♪按钮即可播放');
@@ -1451,9 +1520,22 @@
                 // 衰减速度
                 rotationVelocity.x *= inertiaFactor;
                 rotationVelocity.y *= inertiaFactor;
-                // 应用速度到旋转
-                galaxyRoot.rotation.y += rotationVelocity.y;
-                galaxyRoot.rotation.x += rotationVelocity.x;
+                // 应用速度到相机旋转
+                if (Math.abs(rotationVelocity.x) > 0.0001 || Math.abs(rotationVelocity.y) > 0.0001) {
+                    const center = new THREE.Vector3(0, 0, 0);
+                    // 绕Y轴旋转
+                    const rotationY = new THREE.Matrix4().makeRotationY(rotationVelocity.y);
+                    camera.position.sub(center);
+                    camera.position.applyMatrix4(rotationY);
+                    camera.position.add(center);
+                    // 绕X轴旋转
+                    const rotationX = new THREE.Matrix4().makeRotationX(rotationVelocity.x);
+                    camera.position.sub(center);
+                    camera.position.applyMatrix4(rotationX);
+                    camera.position.add(center);
+                    // 相机永远看向中心
+                    camera.lookAt(center);
+                }
                 // 速度很小的时候清零，避免一直微转
                 if (Math.abs(rotationVelocity.x) < 0.0001) rotationVelocity.x = 0;
                 if (Math.abs(rotationVelocity.y) < 0.0001) rotationVelocity.y = 0;
@@ -1476,6 +1558,30 @@
             }
         }
         function updateCamera(time) {
+            // 处理聚焦动画
+            if (isFocusing) {
+                const elapsed = Date.now() - focusStartTime;
+                const progress = Math.min(elapsed / FOCUS_DURATION, 1);
+                const t = easeInOutQuart(progress);
+                
+                // 插值相机位置和视角
+                camera.position.lerpVectors(focusStartPos, focusTargetPos, t);
+                const currentLookAt = new THREE.Vector3().lerpVectors(focusStartLookAt, focusTargetLookAt, t);
+                camera.lookAt(currentLookAt);
+                
+                // 动画结束后弹出照片，进入永久聚焦状态
+                if (progress >= 1) {
+                    isFocusing = false;
+                    isFocused = true; // 进入永久聚焦，暂停自动相机逻辑
+                    openPhotoModal(hoveredNode);
+                }
+                return; // 聚焦期间跳过原有相机逻辑
+            }
+            // 如果已经处于永久聚焦状态，跳过原有相机逻辑，保持位置
+            if (isFocused) {
+                return;
+            }
+            
             const keyIndex = Math.floor(progress);
             const nextIndex = Math.min(keyIndex + 1, cameraKeyframes.length - 1);
             const t = progress - keyIndex;
@@ -1492,13 +1598,6 @@
                 lerp(startKey.lookAt[1], endKey.lookAt[1], easeT),
                 lerp(startKey.lookAt[2], endKey.lookAt[2], easeT)
             );
-            if (focusedNode) {
-                const focusPos = focusedNode.position;
-                const worldPos = new THREE.Vector3();
-                focusedNode.getWorldPosition(worldPos);
-                targetPos.lerp(worldPos.clone().add(new THREE.Vector3(0, 0, 6)), 0.1);
-                targetLookAt.lerp(worldPos, 0.1);
-            }
             targetPos.x += cameraOffset.x;
             targetPos.y += cameraOffset.y;
             targetPos.z += cameraOffset.z;
